@@ -4,9 +4,12 @@
    Чтобы добавить работу: скопируйте блок из PROJECT-TEMPLATE.txt и вставьте
    перед последней строкой ];. Заполните поля, положите файлы в images/ и video/.
    Новые работы автоматически переходят на следующую строку: пять на компьютере.
-   Кадры demo-*.jpg — только примеры из референса, замените перед публикацией.
-   Первый кадр frames — крупный слева, второй и третий — справа. С четвёртого — сетка по три.
-   Временные кадры из разных проектов: это макет, замените своими материалами.
+
+   БЫСТРАЯ ЗАГРУЗКА + 4K В ПОЛНОМ ЭКРАНЕ:
+   страница показывает лёгкую копию кадра из папки web/ (src),
+   а полноэкранный просмотр открывает исходный файл 4K (original).
+   После добавления новых кадров запустите make-web-versions.bat —
+   он сам создаст лёгкие копии в папках web/.
 */
 const PROJECTS = [
 
@@ -18,35 +21,36 @@ const PROJECTS = [
     title: "Сопка Колдунья. Камчатка",
     // Дополнительная строка под названием.
     subtitle: "Влог · естественный свет",
-    // Картинка главной сетки. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-01/prv.jpg",
+    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-01/web/frame-01.jpg",
     // Полное описание на странице проекта.
     description: "Видеоряд был снят мной во время поездки на родину. Задачей было передать окружение, природу, людей естественным образом. Снято на камеру Sony ZV-E10 с объективами Sigma.",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
+    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
     frames: [
-      "images/prj-01/frame-01.jpg",
-      "images/prj-01/frame-02.jpg",
-      "images/prj-01/frame-03.jpg",
-      "images/prj-01/frame-04.jpg",
-      "images/prj-01/frame-05.jpg",
-      "images/prj-01/frame-06.jpg",
-      "images/prj-01/frame-07.jpg",
-      "images/prj-01/frame-08.jpg",
-      "images/prj-01/frame-09.jpg",
-      "images/prj-01/frame-10.jpg",
+      { src: "images/prj-01/web/frame-01.jpg", original: "images/prj-01/frame-01.jpg" },
+      { src: "images/prj-01/web/frame-02.jpg", original: "images/prj-01/frame-02.jpg" },
+      { src: "images/prj-01/web/frame-03.jpg", original: "images/prj-01/frame-03.jpg" },
+      { src: "images/prj-01/web/frame-04.jpg", original: "images/prj-01/frame-04.jpg" },
+      { src: "images/prj-01/web/frame-05.jpg", original: "images/prj-01/frame-05.jpg" },
+      { src: "images/prj-01/web/frame-06.jpg", original: "images/prj-01/frame-06.jpg" },
+      { src: "images/prj-01/web/frame-07.jpg", original: "images/prj-01/frame-07.jpg" },
+      { src: "images/prj-01/web/frame-08.jpg", original: "images/prj-01/frame-08.jpg" },
+      { src: "images/prj-01/web/frame-09.jpg", original: "images/prj-01/frame-09.jpg" },
+      { src: "images/prj-01/web/frame-10.jpg", original: "images/prj-01/frame-10.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
-    // Сравнение: укажите исходные кадры одного плана на разных этапах.
-    // label — редактируемая подпись; src — путь к оригиналу без уменьшения.
+    // Сравнение: исходные кадры одного плана на разных этапах.
+    // label — редактируемая подпись; src — лёгкая копия из web/ для быстрого показа.
     comparison: {
       frames: [
-        { label: "Log", src: "images/prj-01/comparison/vs-1.jpg" },
-        { label: "Rec.709", src: "images/prj-01/comparison/vs-2.jpg" },
-        { label: "Primaries", src: "images/prj-01/comparison/vs-3.jpg" },
-        { label: "Light, color & skin Fix", src: "images/prj-01/comparison/vs-4.jpg" },
-        { label: "Grade", src: "images/prj-01/comparison/vs-5.jpg" },
-        { label: "Final", src: "images/prj-01/comparison/vs-6.jpg" },
+        { label: "Log", src: "images/prj-01/comparison/web/vs-1.jpg" },
+        { label: "Rec.709", src: "images/prj-01/comparison/web/vs-2.jpg" },
+        { label: "Primaries", src: "images/prj-01/comparison/web/vs-3.jpg" },
+        { label: "Light, color & skin Fix", src: "images/prj-01/comparison/web/vs-4.jpg" },
+        { label: "Grade", src: "images/prj-01/comparison/web/vs-5.jpg" },
+        { label: "Final", src: "images/prj-01/comparison/web/vs-6.jpg" },
       ],
     },
     // true — пример из референса; для своей работы поставьте false.
@@ -61,30 +65,31 @@ const PROJECTS = [
     title: "Бирюзовый автомобиль",
     // Дополнительная строка под названием.
     subtitle: "Клип",
-    // Картинка главной сетки. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-02/frame-01.jpg",
+    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-02/web/frame-01.jpg",
     // Полное описание на странице проекта.
     description: "",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
+    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
     frames: [
-      "images/prj-02/frame-01.jpg",
-      "images/prj-02/frame-02.jpg",
-      "images/prj-02/frame-03.jpg",
-      "images/prj-02/frame-04.jpg",
-      "images/prj-02/frame-05.jpg",
+      { src: "images/prj-02/web/frame-01.jpg", original: "images/prj-02/frame-01.jpg" },
+      { src: "images/prj-02/web/frame-02.jpg", original: "images/prj-02/frame-02.jpg" },
+      { src: "images/prj-02/web/frame-03.jpg", original: "images/prj-02/frame-03.jpg" },
+      { src: "images/prj-02/web/frame-04.jpg", original: "images/prj-02/frame-04.jpg" },
+      { src: "images/prj-02/web/frame-05.jpg", original: "images/prj-02/frame-05.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
-    // Сравнение: укажите исходные кадры одного плана на разных этапах.
-    // label — редактируемая подпись; src — путь к оригиналу без уменьшения.
+    // Сравнение: исходные кадры одного плана на разных этапах.
+    // label — редактируемая подпись; src — лёгкая копия из web/ для быстрого показа.
     comparison: {
       frames: [
-        { label: "Log", src: "images/prj-02/comparison/vs-1.jpg" },
-        { label: "Rec.709", src: "images/prj-02/comparison/vs-2.jpg" },
-        { label: "Primaries", src: "images/prj-02/comparison/vs-3.jpg" },
-        { label: "Light & color Fix", src: "images/prj-02/comparison/vs-4.jpg" },
-        { label: "Local grade", src: "images/prj-02/comparison/vs-5.jpg" },
-        { label: "Final", src: "images/prj-02/comparison/vs-6.jpg" },
+        { label: "Log", src: "images/prj-02/comparison/web/vs-1.jpg" },
+        { label: "Rec.709", src: "images/prj-02/comparison/web/vs-2.jpg" },
+        { label: "Primaries", src: "images/prj-02/comparison/web/vs-3.jpg" },
+        { label: "Light & color Fix", src: "images/prj-02/comparison/web/vs-4.jpg" },
+        { label: "Local grade", src: "images/prj-02/comparison/web/vs-5.jpg" },
+        { label: "Final", src: "images/prj-02/comparison/web/vs-6.jpg" },
       ],
     },
     // true — пример из референса; для своей работы поставьте false.
@@ -99,34 +104,35 @@ const PROJECTS = [
     title: "Mercedes-AMG",
     // Дополнительная строка под названием.
     subtitle: "Клип",
-    // Картинка главной сетки. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-03/frame-01.jpg",
+    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-03/web/frame-01.jpg",
     // Полное описание на странице проекта.
     description: "",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
+    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
     frames: [
-      "images/prj-03/frame-01.jpg",
-      "images/prj-03/frame-02.jpg",
-      "images/prj-03/frame-03.jpg", 
-      "images/prj-03/frame-05.jpg",
-      "images/prj-03/frame-06.jpg",
-      "images/prj-03/frame-07.jpg",
-      "images/prj-03/frame-08.jpg",
-      "images/prj-03/frame-09.jpg",
-      "images/prj-03/frame-10.jpg",
+      { src: "images/prj-03/web/frame-01.jpg", original: "images/prj-03/frame-01.jpg" },
+      { src: "images/prj-03/web/frame-02.jpg", original: "images/prj-03/frame-02.jpg" },
+      { src: "images/prj-03/web/frame-03.jpg", original: "images/prj-03/frame-03.jpg" },
+      { src: "images/prj-03/web/frame-05.jpg", original: "images/prj-03/frame-05.jpg" },
+      { src: "images/prj-03/web/frame-06.jpg", original: "images/prj-03/frame-06.jpg" },
+      { src: "images/prj-03/web/frame-07.jpg", original: "images/prj-03/frame-07.jpg" },
+      { src: "images/prj-03/web/frame-08.jpg", original: "images/prj-03/frame-08.jpg" },
+      { src: "images/prj-03/web/frame-09.jpg", original: "images/prj-03/frame-09.jpg" },
+      { src: "images/prj-03/web/frame-10.jpg", original: "images/prj-03/frame-10.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
-    // Сравнение: укажите исходные кадры одного плана на разных этапах.
-    // label — редактируемая подпись; src — путь к оригиналу без уменьшения.
+    // Сравнение: исходные кадры одного плана на разных этапах.
+    // label — редактируемая подпись; src — лёгкая копия из web/ для быстрого показа.
     comparison: {
       frames: [
-        { label: "Log", src: "images/prj-03/comparison/vs-1.jpg" },
-        { label: "Rec.709", src: "images/prj-03/comparison/vs-2.jpg" },
-        { label: "Primaries", src: "images/prj-03/comparison/vs-3.jpg" },
-        { label: "Color & skin Fix", src: "images/prj-03/comparison/vs-4.jpg" },
-        { label: "Grade", src: "images/prj-03/comparison/vs-5.jpg" },
-        { label: "Final", src: "images/prj-03/comparison/vs-6.jpg" },
+        { label: "Log", src: "images/prj-03/comparison/web/vs-1.jpg" },
+        { label: "Rec.709", src: "images/prj-03/comparison/web/vs-2.jpg" },
+        { label: "Primaries", src: "images/prj-03/comparison/web/vs-3.jpg" },
+        { label: "Color & skin Fix", src: "images/prj-03/comparison/web/vs-4.jpg" },
+        { label: "Grade", src: "images/prj-03/comparison/web/vs-5.jpg" },
+        { label: "Final", src: "images/prj-03/comparison/web/vs-6.jpg" },
       ],
     },
     // true — пример из референса; для своей работы поставьте false.
@@ -141,26 +147,27 @@ const PROJECTS = [
     title: "Сопка Мишенная в тумане. Камчатка",
     // Дополнительная строка под названием.
     subtitle: "Влог · cinematic",
-    // Картинка главной сетки. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-04/frame-01.jpg",
+    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-04/web/frame-01.jpg",
     // Полное описание на странице проекта.
     description: "Футажи, снятые мной специально для цветокоррекции в ''киношном'' стиле. Камера Sony ZV-E10",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
+    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
     frames: [
-      "images/prj-04/frame-01.jpg",
-      "images/prj-04/frame-02.jpg",
-      "images/prj-04/frame-03.jpg",
-      "images/prj-04/frame-04.jpg",
-      "images/prj-04/frame-05.jpg",
-      "images/prj-04/frame-06.jpg",
-      "images/prj-04/frame-07.jpg",
-      "images/prj-04/frame-08.jpg",
-      "images/prj-04/frame-09.jpg",
+      { src: "images/prj-04/web/frame-01.jpg", original: "images/prj-04/frame-01.jpg" },
+      { src: "images/prj-04/web/frame-02.jpg", original: "images/prj-04/frame-02.jpg" },
+      { src: "images/prj-04/web/frame-03.jpg", original: "images/prj-04/frame-03.jpg" },
+      { src: "images/prj-04/web/frame-04.jpg", original: "images/prj-04/frame-04.jpg" },
+      { src: "images/prj-04/web/frame-05.jpg", original: "images/prj-04/frame-05.jpg" },
+      { src: "images/prj-04/web/frame-06.jpg", original: "images/prj-04/frame-06.jpg" },
+      { src: "images/prj-04/web/frame-07.jpg", original: "images/prj-04/frame-07.jpg" },
+      { src: "images/prj-04/web/frame-08.jpg", original: "images/prj-04/frame-08.jpg" },
+      { src: "images/prj-04/web/frame-09.jpg", original: "images/prj-04/frame-09.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
-    // Сравнение: укажите исходные кадры одного плана на разных этапах.
-    // label — редактируемая подпись; src — путь к оригиналу без уменьшения.
+    // Сравнение: исходные кадры одного плана на разных этапах.
+    // label — редактируемая подпись; src — путь к лёгкой копии или оригиналу.
     comparison: {
       frames: [
         { label: "Log", src: "" },
@@ -183,23 +190,24 @@ const PROJECTS = [
     title: "Дайверы",
     // Дополнительная строка под названием.
     subtitle: "Клип · документалистика",
-    // Картинка главной сетки. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-05/frame-01.jpg",
+    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-05/web/frame-01.jpg",
     // Полное описание на странице проекта.
     description: "",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
+    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
     frames: [
-      "images/prj-05/frame-01.jpg",
-      "images/prj-05/frame-02.jpg",
-      "images/prj-05/frame-03.jpg",
-      "images/prj-05/frame-04.jpg",
-      "images/prj-05/frame-05.jpg",
-      "images/prj-05/frame-06.jpg",
+      { src: "images/prj-05/web/frame-01.jpg", original: "images/prj-05/frame-01.jpg" },
+      { src: "images/prj-05/web/frame-02.jpg", original: "images/prj-05/frame-02.jpg" },
+      { src: "images/prj-05/web/frame-03.jpg", original: "images/prj-05/frame-03.jpg" },
+      { src: "images/prj-05/web/frame-04.jpg", original: "images/prj-05/frame-04.jpg" },
+      { src: "images/prj-05/web/frame-05.jpg", original: "images/prj-05/frame-05.jpg" },
+      { src: "images/prj-05/web/frame-06.jpg", original: "images/prj-05/frame-06.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
-    // Сравнение: укажите исходные кадры одного плана на разных этапах.
-    // label — редактируемая подпись; src — путь к оригиналу без уменьшения.
+    // Сравнение: исходные кадры одного плана на разных этапах.
+    // label — редактируемая подпись; src — путь к лёгкой копии или оригиналу.
     comparison: {
       frames: [
         { label: "Log", src: "" },
@@ -222,22 +230,23 @@ const PROJECTS = [
     title: "Озеро. Закат. Камчатка",
     // Дополнительная строка под названием.
     subtitle: "Влог · cinematic",
-    // Картинка главной сетки. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-06/frame-01.jpg",
+    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-06/web/frame-01.jpg",
     // Полное описание на странице проекта.
     description: "Снятые мной футажи на камеру Sony ZV-E10. Идея была максимально передать невероятный закат, краски неба и переливы водяной глади.",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
+    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
     frames: [
-      "images/prj-06/frame-01.jpg",
-      "images/prj-06/frame-02.jpg",
-      "images/prj-06/frame-03.jpg",
-      "images/prj-06/frame-04.jpg",
-      "images/prj-06/frame-05.jpg",
+      { src: "images/prj-06/web/frame-01.jpg", original: "images/prj-06/frame-01.jpg" },
+      { src: "images/prj-06/web/frame-02.jpg", original: "images/prj-06/frame-02.jpg" },
+      { src: "images/prj-06/web/frame-03.jpg", original: "images/prj-06/frame-03.jpg" },
+      { src: "images/prj-06/web/frame-04.jpg", original: "images/prj-06/frame-04.jpg" },
+      { src: "images/prj-06/web/frame-05.jpg", original: "images/prj-06/frame-05.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
-    // Сравнение: укажите исходные кадры одного плана на разных этапах.
-    // label — редактируемая подпись; src — путь к оригиналу без уменьшения.
+    // Сравнение: исходные кадры одного плана на разных этапах.
+    // label — редактируемая подпись; src — путь к лёгкой копии или оригиналу.
     comparison: {
       frames: [
         { label: "Log", src: "" },
@@ -260,22 +269,23 @@ const PROJECTS = [
     title: "Лия с псом",
     // Дополнительная строка под названием.
     subtitle: "Клип · бэкстейдж",
-    // Картинка главной сетки. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-07/frame-01.jpg",
+    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-07/web/frame-01.jpg",
     // Полное описание на странице проекта.
     description: "Несколько клипов снятых мной для бэкстейджа будучи на фотосессии у https://www.instagram.com/ph_ignatova?obrf=dnEzdmcydDQxNXpt",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
+    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
     frames: [
-      "images/prj-07/frame-01.jpg",
-      "images/prj-07/frame-02.jpg",
-      "images/prj-07/frame-03.jpg",
-      "images/prj-07/frame-04.jpg",
-      "images/prj-07/frame-05.jpg",
+      { src: "images/prj-07/web/frame-01.jpg", original: "images/prj-07/frame-01.jpg" },
+      { src: "images/prj-07/web/frame-02.jpg", original: "images/prj-07/frame-02.jpg" },
+      { src: "images/prj-07/web/frame-03.jpg", original: "images/prj-07/frame-03.jpg" },
+      { src: "images/prj-07/web/frame-04.jpg", original: "images/prj-07/frame-04.jpg" },
+      { src: "images/prj-07/web/frame-05.jpg", original: "images/prj-07/frame-05.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
-    // Сравнение: укажите исходные кадры одного плана на разных этапах.
-    // label — редактируемая подпись; src — путь к оригиналу без уменьшения.
+    // Сравнение: исходные кадры одного плана на разных этапах.
+    // label — редактируемая подпись; src — путь к лёгкой копии или оригиналу.
     comparison: {
       frames: [
         { label: "Log", src: "" },
@@ -298,22 +308,23 @@ const PROJECTS = [
     title: "Серфинг",
     // Дополнительная строка под названием.
     subtitle: "Клип · cinematic",
-    // Картинка главной сетки. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-08/frame-01.jpg",
+    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-08/web/frame-01.jpg",
     // Полное описание на странице проекта.
     description: "",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
+    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
     frames: [
-      "images/prj-08/frame-01.jpg",
-      "images/prj-08/frame-02.jpg",
-      "images/prj-08/frame-03.jpg",
-      "images/prj-08/frame-04.jpg",
-      
+      { src: "images/prj-08/web/frame-01.jpg", original: "images/prj-08/frame-01.jpg" },
+      { src: "images/prj-08/web/frame-02.jpg", original: "images/prj-08/frame-02.jpg" },
+      { src: "images/prj-08/web/frame-03.jpg", original: "images/prj-08/frame-03.jpg" },
+      { src: "images/prj-08/web/frame-04.jpg", original: "images/prj-08/frame-04.jpg" },
+
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
-    // Сравнение: укажите исходные кадры одного плана на разных этапах.
-    // label — редактируемая подпись; src — путь к оригиналу без уменьшения.
+    // Сравнение: исходные кадры одного плана на разных этапах.
+    // label — редактируемая подпись; src — путь к лёгкой копии или оригиналу.
     comparison: {
       frames: [
         { label: "Log", src: "" },
@@ -336,20 +347,21 @@ const PROJECTS = [
     title: "Недвижимость",
     // Дополнительная строка под названием.
     subtitle: "Реклама",
-    // Картинка главной сетки. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-09/frame-01.jpg",
+    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-09/web/frame-01.jpg",
     // Полное описание на странице проекта.
     description: "",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
+    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
     frames: [
-      "images/prj-09/frame-01.jpg",
-      "images/prj-09/frame-02.jpg",
-      
+      { src: "images/prj-09/web/frame-01.jpg", original: "images/prj-09/frame-01.jpg" },
+      { src: "images/prj-09/web/frame-02.jpg", original: "images/prj-09/frame-02.jpg" },
+
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
-    // Сравнение: укажите исходные кадры одного плана на разных этапах.
-    // label — редактируемая подпись; src — путь к оригиналу без уменьшения.
+    // Сравнение: исходные кадры одного плана на разных этапах.
+    // label — редактируемая подпись; src — путь к лёгкой копии или оригиналу.
     comparison: {
       frames: [
         { label: "Log", src: "" },
@@ -372,22 +384,24 @@ const PROJECTS = [
     title: "Джаз-бэнд",
     // Дополнительная строка под названием.
     subtitle: "Клип",
-    // Картинка главной сетки. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-10/frame-01.jpg",
+    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-10/web/frame-01.jpg",
     // Полное описание на странице проекта.
     description: "",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
+    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
     frames: [
-      "images/prj-10/frame-01.jpg",
-      "images/prj-10/frame-02.jpg",
-      "images/prj-10/frame-03.jpg",
-      "images/prj-10/frame-04.jpg",
-      "images/prj-10/frame-05.jpg",
+      { src: "images/prj-10/web/frame-01.jpg", original: "images/prj-10/frame-01.jpg" },
+      { src: "images/prj-10/web/frame-02.jpg", original: "images/prj-10/frame-02.jpg" },
+      { src: "images/prj-10/web/frame-03.jpg", original: "images/prj-10/frame-03.jpg" },
+      { src: "images/prj-10/web/frame-04.jpg", original: "images/prj-10/frame-04.jpg" },
+      { src: "images/prj-10/web/frame-05.jpg", original: "images/prj-10/frame-05.jpg" },
+      { src: "images/prj-10/web/frame-06.jpg", original: "images/prj-10/frame-06.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
-    // Сравнение: укажите исходные кадры одного плана на разных этапах.
-    // label — редактируемая подпись; src — путь к оригиналу без уменьшения.
+    // Сравнение: исходные кадры одного плана на разных этапах.
+    // label — редактируемая подпись; src — путь к лёгкой копии или оригиналу.
     comparison: {
       frames: [
         { label: "Log", src: "" },

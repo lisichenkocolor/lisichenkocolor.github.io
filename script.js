@@ -219,12 +219,23 @@
     watchPixelRatio();
     paintZoom();
     const originalSrc = f => safeUrl(typeof f === 'object' ? (f.original || f.src) : f);
+    // Лёгкая версия для мгновенного показа: только когда у кадра задан отдельный оригинал.
+    const quickSrc = f => typeof f === 'object' && f.original ? safeUrl(f.src) : null;
 
     function preloadNeighbors(index) {
       if (frames.length < 2) return;
       [index-1,index+1].forEach(n => {
         const im = new Image(); im.src = originalSrc(frames[(n+frames.length)%frames.length]);
       });
+    }
+    // Незаметно подменяет показанную лёгкую версию полным оригиналом, как только он готов.
+    function upgradeToOriginal(im, fullSrc, token) {
+      const hi = new Image(); hi.src = fullSrc;
+      hi.decode().then(() => {
+        if (token !== requestId || !viewer.open || currentImage !== im) return;
+        im.src = fullSrc; // тот же размер на экране, но разрешение исходного файла
+        paintZoom();
+      }).catch(() => {});
     }
     async function showFrame(index, direction = 0, firstOpen = false) {
       hideHint(firstOpen); hintAllowed = firstOpen;
@@ -233,8 +244,10 @@
       const token = ++requestId, frame = frames[active], im = new Image();
       im.className = 'lightbox-image';
       im.alt = typeof frame === 'object' && frame.alt ? frame.alt : projectTitle + ' — кадр ' + (active+1);
-      // Загружается именно исходный файл, без ресайза, перекодирования или фильтров.
-      im.src = originalSrc(frame);
+      // Сначала мгновенно показывается лёгкая версия кадра, затем в фоне
+      // загружается исходный файл — без ресайза, перекодирования и фильтров.
+      const quick = quickSrc(frame), full = originalSrc(frame);
+      im.src = quick || full;
       message.textContent = 'Загрузка кадра…'; message.hidden = false;
       try { await im.decode(); }
       catch (_) {
@@ -260,6 +273,7 @@
       } else if(oldImage) oldImage.remove();
       viewer.querySelector('.lightbox-announcement').textContent = `Кадр ${active+1} из ${frames.length}`;
       preloadNeighbors(active);
+      if (quick && quick !== full) upgradeToOriginal(im, full, token);
     }
     function closeViewer() {
       if (!viewer.open) return;
