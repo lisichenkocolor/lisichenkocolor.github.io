@@ -6,10 +6,12 @@
    Новые работы автоматически переходят на следующую строку: пять на компьютере.
 
    БЫСТРАЯ ЗАГРУЗКА + 4K В ПОЛНОМ ЭКРАНЕ:
-   страница показывает лёгкую копию кадра из папки web/ (src),
-   а полноэкранный просмотр открывает исходный файл 4K (original).
+   каждый кадр хранится в трёх версиях —
+   thumb — уменьшенная копия для ячеек сетки и превью главной,
+   src — копия 1920 px для большого кадра и мгновенного показа на весь экран,
+   original — исходный файл 4K, который догружается в полном экране.
    После добавления новых кадров запустите make-web-versions.bat —
-   он сам создаст лёгкие копии в папках web/.
+   он сам создаст обе копии в папках web/.
 */
 const PROJECTS = [
 
@@ -21,23 +23,23 @@ const PROJECTS = [
     title: "Сопка Колдунья. Камчатка",
     // Дополнительная строка под названием.
     subtitle: "Влог · естественный свет",
-    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-01/web/frame-01.jpg",
+    // Картинка главной сетки — уменьшенная копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-01/web/frame-01-thumb.jpg",
     // Полное описание на странице проекта.
     description: "Видеоряд был снят мной во время поездки на родину. Задачей было передать окружение, природу, людей естественным образом. Снято на камеру Sony ZV-E10 с объективами Sigma.",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
-    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
+    // thumb — копия для ячеек, src — 1920 px, original — исходный файл 4K для полного экрана.
     frames: [
-      { src: "images/prj-01/web/frame-01.jpg", original: "images/prj-01/frame-01.jpg" },
-      { src: "images/prj-01/web/frame-02.jpg", original: "images/prj-01/frame-02.jpg" },
-      { src: "images/prj-01/web/frame-03.jpg", original: "images/prj-01/frame-03.jpg" },
-      { src: "images/prj-01/web/frame-04.jpg", original: "images/prj-01/frame-04.jpg" },
-      { src: "images/prj-01/web/frame-05.jpg", original: "images/prj-01/frame-05.jpg" },
-      { src: "images/prj-01/web/frame-06.jpg", original: "images/prj-01/frame-06.jpg" },
-      { src: "images/prj-01/web/frame-07.jpg", original: "images/prj-01/frame-07.jpg" },
-      { src: "images/prj-01/web/frame-08.jpg", original: "images/prj-01/frame-08.jpg" },
-      { src: "images/prj-01/web/frame-09.jpg", original: "images/prj-01/frame-09.jpg" },
-      { src: "images/prj-01/web/frame-10.jpg", original: "images/prj-01/frame-10.jpg" },
+      { src: "images/prj-01/web/frame-01.jpg", thumb: "images/prj-01/web/frame-01-thumb.jpg", original: "images/prj-01/frame-01.jpg" },
+      { src: "images/prj-01/web/frame-02.jpg", thumb: "images/prj-01/web/frame-02-thumb.jpg", original: "images/prj-01/frame-02.jpg" },
+      { src: "images/prj-01/web/frame-03.jpg", thumb: "images/prj-01/web/frame-03-thumb.jpg", original: "images/prj-01/frame-03.jpg" },
+      { src: "images/prj-01/web/frame-04.jpg", thumb: "images/prj-01/web/frame-04-thumb.jpg", original: "images/prj-01/frame-04.jpg" },
+      { src: "images/prj-01/web/frame-05.jpg", thumb: "images/prj-01/web/frame-05-thumb.jpg", original: "images/prj-01/frame-05.jpg" },
+      { src: "images/prj-01/web/frame-06.jpg", thumb: "images/prj-01/web/frame-06-thumb.jpg", original: "images/prj-01/frame-06.jpg" },
+      { src: "images/prj-01/web/frame-07.jpg", thumb: "images/prj-01/web/frame-07-thumb.jpg", original: "images/prj-01/frame-07.jpg" },
+      { src: "images/prj-01/web/frame-08.jpg", thumb: "images/prj-01/web/frame-08-thumb.jpg", original: "images/prj-01/frame-08.jpg" },
+      { src: "images/prj-01/web/frame-09.jpg", thumb: "images/prj-01/web/frame-09-thumb.jpg", original: "images/prj-01/frame-09.jpg" },
+      { src: "images/prj-01/web/frame-10.jpg", thumb: "images/prj-01/web/frame-10-thumb.jpg", original: "images/prj-01/frame-10.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
@@ -65,18 +67,18 @@ const PROJECTS = [
     title: "Бирюзовый автомобиль",
     // Дополнительная строка под названием.
     subtitle: "Клип",
-    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-02/web/frame-01.jpg",
+    // Картинка главной сетки — уменьшенная копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-02/web/frame-01-thumb.jpg",
     // Полное описание на странице проекта.
     description: "",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
-    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
+    // thumb — копия для ячеек, src — 1920 px, original — исходный файл 4K для полного экрана.
     frames: [
-      { src: "images/prj-02/web/frame-01.jpg", original: "images/prj-02/frame-01.jpg" },
-      { src: "images/prj-02/web/frame-02.jpg", original: "images/prj-02/frame-02.jpg" },
-      { src: "images/prj-02/web/frame-03.jpg", original: "images/prj-02/frame-03.jpg" },
-      { src: "images/prj-02/web/frame-04.jpg", original: "images/prj-02/frame-04.jpg" },
-      { src: "images/prj-02/web/frame-05.jpg", original: "images/prj-02/frame-05.jpg" },
+      { src: "images/prj-02/web/frame-01.jpg", thumb: "images/prj-02/web/frame-01-thumb.jpg", original: "images/prj-02/frame-01.jpg" },
+      { src: "images/prj-02/web/frame-02.jpg", thumb: "images/prj-02/web/frame-02-thumb.jpg", original: "images/prj-02/frame-02.jpg" },
+      { src: "images/prj-02/web/frame-03.jpg", thumb: "images/prj-02/web/frame-03-thumb.jpg", original: "images/prj-02/frame-03.jpg" },
+      { src: "images/prj-02/web/frame-04.jpg", thumb: "images/prj-02/web/frame-04-thumb.jpg", original: "images/prj-02/frame-04.jpg" },
+      { src: "images/prj-02/web/frame-05.jpg", thumb: "images/prj-02/web/frame-05-thumb.jpg", original: "images/prj-02/frame-05.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
@@ -104,22 +106,22 @@ const PROJECTS = [
     title: "Mercedes-AMG",
     // Дополнительная строка под названием.
     subtitle: "Клип",
-    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-03/web/frame-01.jpg",
+    // Картинка главной сетки — уменьшенная копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-03/web/frame-01-thumb.jpg",
     // Полное описание на странице проекта.
     description: "",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
-    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
+    // thumb — копия для ячеек, src — 1920 px, original — исходный файл 4K для полного экрана.
     frames: [
-      { src: "images/prj-03/web/frame-01.jpg", original: "images/prj-03/frame-01.jpg" },
-      { src: "images/prj-03/web/frame-02.jpg", original: "images/prj-03/frame-02.jpg" },
-      { src: "images/prj-03/web/frame-03.jpg", original: "images/prj-03/frame-03.jpg" },
-      { src: "images/prj-03/web/frame-05.jpg", original: "images/prj-03/frame-05.jpg" },
-      { src: "images/prj-03/web/frame-06.jpg", original: "images/prj-03/frame-06.jpg" },
-      { src: "images/prj-03/web/frame-07.jpg", original: "images/prj-03/frame-07.jpg" },
-      { src: "images/prj-03/web/frame-08.jpg", original: "images/prj-03/frame-08.jpg" },
-      { src: "images/prj-03/web/frame-09.jpg", original: "images/prj-03/frame-09.jpg" },
-      { src: "images/prj-03/web/frame-10.jpg", original: "images/prj-03/frame-10.jpg" },
+      { src: "images/prj-03/web/frame-01.jpg", thumb: "images/prj-03/web/frame-01-thumb.jpg", original: "images/prj-03/frame-01.jpg" },
+      { src: "images/prj-03/web/frame-02.jpg", thumb: "images/prj-03/web/frame-02-thumb.jpg", original: "images/prj-03/frame-02.jpg" },
+      { src: "images/prj-03/web/frame-03.jpg", thumb: "images/prj-03/web/frame-03-thumb.jpg", original: "images/prj-03/frame-03.jpg" },
+      { src: "images/prj-03/web/frame-05.jpg", thumb: "images/prj-03/web/frame-05-thumb.jpg", original: "images/prj-03/frame-05.jpg" },
+      { src: "images/prj-03/web/frame-06.jpg", thumb: "images/prj-03/web/frame-06-thumb.jpg", original: "images/prj-03/frame-06.jpg" },
+      { src: "images/prj-03/web/frame-07.jpg", thumb: "images/prj-03/web/frame-07-thumb.jpg", original: "images/prj-03/frame-07.jpg" },
+      { src: "images/prj-03/web/frame-08.jpg", thumb: "images/prj-03/web/frame-08-thumb.jpg", original: "images/prj-03/frame-08.jpg" },
+      { src: "images/prj-03/web/frame-09.jpg", thumb: "images/prj-03/web/frame-09-thumb.jpg", original: "images/prj-03/frame-09.jpg" },
+      { src: "images/prj-03/web/frame-10.jpg", thumb: "images/prj-03/web/frame-10-thumb.jpg", original: "images/prj-03/frame-10.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
@@ -147,22 +149,22 @@ const PROJECTS = [
     title: "Сопка Мишенная в тумане. Камчатка",
     // Дополнительная строка под названием.
     subtitle: "Влог · cinematic",
-    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-04/web/frame-01.jpg",
+    // Картинка главной сетки — уменьшенная копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-04/web/frame-01-thumb.jpg",
     // Полное описание на странице проекта.
     description: "Футажи, снятые мной специально для цветокоррекции в ''киношном'' стиле. Камера Sony ZV-E10",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
-    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
+    // thumb — копия для ячеек, src — 1920 px, original — исходный файл 4K для полного экрана.
     frames: [
-      { src: "images/prj-04/web/frame-01.jpg", original: "images/prj-04/frame-01.jpg" },
-      { src: "images/prj-04/web/frame-02.jpg", original: "images/prj-04/frame-02.jpg" },
-      { src: "images/prj-04/web/frame-03.jpg", original: "images/prj-04/frame-03.jpg" },
-      { src: "images/prj-04/web/frame-04.jpg", original: "images/prj-04/frame-04.jpg" },
-      { src: "images/prj-04/web/frame-05.jpg", original: "images/prj-04/frame-05.jpg" },
-      { src: "images/prj-04/web/frame-06.jpg", original: "images/prj-04/frame-06.jpg" },
-      { src: "images/prj-04/web/frame-07.jpg", original: "images/prj-04/frame-07.jpg" },
-      { src: "images/prj-04/web/frame-08.jpg", original: "images/prj-04/frame-08.jpg" },
-      { src: "images/prj-04/web/frame-09.jpg", original: "images/prj-04/frame-09.jpg" },
+      { src: "images/prj-04/web/frame-01.jpg", thumb: "images/prj-04/web/frame-01-thumb.jpg", original: "images/prj-04/frame-01.jpg" },
+      { src: "images/prj-04/web/frame-02.jpg", thumb: "images/prj-04/web/frame-02-thumb.jpg", original: "images/prj-04/frame-02.jpg" },
+      { src: "images/prj-04/web/frame-03.jpg", thumb: "images/prj-04/web/frame-03-thumb.jpg", original: "images/prj-04/frame-03.jpg" },
+      { src: "images/prj-04/web/frame-04.jpg", thumb: "images/prj-04/web/frame-04-thumb.jpg", original: "images/prj-04/frame-04.jpg" },
+      { src: "images/prj-04/web/frame-05.jpg", thumb: "images/prj-04/web/frame-05-thumb.jpg", original: "images/prj-04/frame-05.jpg" },
+      { src: "images/prj-04/web/frame-06.jpg", thumb: "images/prj-04/web/frame-06-thumb.jpg", original: "images/prj-04/frame-06.jpg" },
+      { src: "images/prj-04/web/frame-07.jpg", thumb: "images/prj-04/web/frame-07-thumb.jpg", original: "images/prj-04/frame-07.jpg" },
+      { src: "images/prj-04/web/frame-08.jpg", thumb: "images/prj-04/web/frame-08-thumb.jpg", original: "images/prj-04/frame-08.jpg" },
+      { src: "images/prj-04/web/frame-09.jpg", thumb: "images/prj-04/web/frame-09-thumb.jpg", original: "images/prj-04/frame-09.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
@@ -190,19 +192,19 @@ const PROJECTS = [
     title: "Дайверы",
     // Дополнительная строка под названием.
     subtitle: "Клип · документалистика",
-    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-05/web/frame-01.jpg",
+    // Картинка главной сетки — уменьшенная копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-05/web/frame-01-thumb.jpg",
     // Полное описание на странице проекта.
     description: "",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
-    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
+    // thumb — копия для ячеек, src — 1920 px, original — исходный файл 4K для полного экрана.
     frames: [
-      { src: "images/prj-05/web/frame-01.jpg", original: "images/prj-05/frame-01.jpg" },
-      { src: "images/prj-05/web/frame-02.jpg", original: "images/prj-05/frame-02.jpg" },
-      { src: "images/prj-05/web/frame-03.jpg", original: "images/prj-05/frame-03.jpg" },
-      { src: "images/prj-05/web/frame-04.jpg", original: "images/prj-05/frame-04.jpg" },
-      { src: "images/prj-05/web/frame-05.jpg", original: "images/prj-05/frame-05.jpg" },
-      { src: "images/prj-05/web/frame-06.jpg", original: "images/prj-05/frame-06.jpg" },
+      { src: "images/prj-05/web/frame-01.jpg", thumb: "images/prj-05/web/frame-01-thumb.jpg", original: "images/prj-05/frame-01.jpg" },
+      { src: "images/prj-05/web/frame-02.jpg", thumb: "images/prj-05/web/frame-02-thumb.jpg", original: "images/prj-05/frame-02.jpg" },
+      { src: "images/prj-05/web/frame-03.jpg", thumb: "images/prj-05/web/frame-03-thumb.jpg", original: "images/prj-05/frame-03.jpg" },
+      { src: "images/prj-05/web/frame-04.jpg", thumb: "images/prj-05/web/frame-04-thumb.jpg", original: "images/prj-05/frame-04.jpg" },
+      { src: "images/prj-05/web/frame-05.jpg", thumb: "images/prj-05/web/frame-05-thumb.jpg", original: "images/prj-05/frame-05.jpg" },
+      { src: "images/prj-05/web/frame-06.jpg", thumb: "images/prj-05/web/frame-06-thumb.jpg", original: "images/prj-05/frame-06.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
@@ -230,18 +232,18 @@ const PROJECTS = [
     title: "Озеро. Закат. Камчатка",
     // Дополнительная строка под названием.
     subtitle: "Влог · cinematic",
-    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-06/web/frame-01.jpg",
+    // Картинка главной сетки — уменьшенная копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-06/web/frame-01-thumb.jpg",
     // Полное описание на странице проекта.
     description: "Снятые мной футажи на камеру Sony ZV-E10. Идея была максимально передать невероятный закат, краски неба и переливы водяной глади.",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
-    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
+    // thumb — копия для ячеек, src — 1920 px, original — исходный файл 4K для полного экрана.
     frames: [
-      { src: "images/prj-06/web/frame-01.jpg", original: "images/prj-06/frame-01.jpg" },
-      { src: "images/prj-06/web/frame-02.jpg", original: "images/prj-06/frame-02.jpg" },
-      { src: "images/prj-06/web/frame-03.jpg", original: "images/prj-06/frame-03.jpg" },
-      { src: "images/prj-06/web/frame-04.jpg", original: "images/prj-06/frame-04.jpg" },
-      { src: "images/prj-06/web/frame-05.jpg", original: "images/prj-06/frame-05.jpg" },
+      { src: "images/prj-06/web/frame-01.jpg", thumb: "images/prj-06/web/frame-01-thumb.jpg", original: "images/prj-06/frame-01.jpg" },
+      { src: "images/prj-06/web/frame-02.jpg", thumb: "images/prj-06/web/frame-02-thumb.jpg", original: "images/prj-06/frame-02.jpg" },
+      { src: "images/prj-06/web/frame-03.jpg", thumb: "images/prj-06/web/frame-03-thumb.jpg", original: "images/prj-06/frame-03.jpg" },
+      { src: "images/prj-06/web/frame-04.jpg", thumb: "images/prj-06/web/frame-04-thumb.jpg", original: "images/prj-06/frame-04.jpg" },
+      { src: "images/prj-06/web/frame-05.jpg", thumb: "images/prj-06/web/frame-05-thumb.jpg", original: "images/prj-06/frame-05.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
@@ -269,18 +271,18 @@ const PROJECTS = [
     title: "Лия с псом",
     // Дополнительная строка под названием.
     subtitle: "Клип · бэкстейдж",
-    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-07/web/frame-01.jpg",
+    // Картинка главной сетки — уменьшенная копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-07/web/frame-01-thumb.jpg",
     // Полное описание на странице проекта.
     description: "Несколько клипов снятых мной для бэкстейджа будучи на фотосессии у https://www.instagram.com/ph_ignatova?obrf=dnEzdmcydDQxNXpt",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
-    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
+    // thumb — копия для ячеек, src — 1920 px, original — исходный файл 4K для полного экрана.
     frames: [
-      { src: "images/prj-07/web/frame-01.jpg", original: "images/prj-07/frame-01.jpg" },
-      { src: "images/prj-07/web/frame-02.jpg", original: "images/prj-07/frame-02.jpg" },
-      { src: "images/prj-07/web/frame-03.jpg", original: "images/prj-07/frame-03.jpg" },
-      { src: "images/prj-07/web/frame-04.jpg", original: "images/prj-07/frame-04.jpg" },
-      { src: "images/prj-07/web/frame-05.jpg", original: "images/prj-07/frame-05.jpg" },
+      { src: "images/prj-07/web/frame-01.jpg", thumb: "images/prj-07/web/frame-01-thumb.jpg", original: "images/prj-07/frame-01.jpg" },
+      { src: "images/prj-07/web/frame-02.jpg", thumb: "images/prj-07/web/frame-02-thumb.jpg", original: "images/prj-07/frame-02.jpg" },
+      { src: "images/prj-07/web/frame-03.jpg", thumb: "images/prj-07/web/frame-03-thumb.jpg", original: "images/prj-07/frame-03.jpg" },
+      { src: "images/prj-07/web/frame-04.jpg", thumb: "images/prj-07/web/frame-04-thumb.jpg", original: "images/prj-07/frame-04.jpg" },
+      { src: "images/prj-07/web/frame-05.jpg", thumb: "images/prj-07/web/frame-05-thumb.jpg", original: "images/prj-07/frame-05.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,
@@ -308,17 +310,17 @@ const PROJECTS = [
     title: "Серфинг",
     // Дополнительная строка под названием.
     subtitle: "Клип · cinematic",
-    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-08/web/frame-01.jpg",
+    // Картинка главной сетки — уменьшенная копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-08/web/frame-01-thumb.jpg",
     // Полное описание на странице проекта.
     description: "",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
-    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
+    // thumb — копия для ячеек, src — 1920 px, original — исходный файл 4K для полного экрана.
     frames: [
-      { src: "images/prj-08/web/frame-01.jpg", original: "images/prj-08/frame-01.jpg" },
-      { src: "images/prj-08/web/frame-02.jpg", original: "images/prj-08/frame-02.jpg" },
-      { src: "images/prj-08/web/frame-03.jpg", original: "images/prj-08/frame-03.jpg" },
-      { src: "images/prj-08/web/frame-04.jpg", original: "images/prj-08/frame-04.jpg" },
+      { src: "images/prj-08/web/frame-01.jpg", thumb: "images/prj-08/web/frame-01-thumb.jpg", original: "images/prj-08/frame-01.jpg" },
+      { src: "images/prj-08/web/frame-02.jpg", thumb: "images/prj-08/web/frame-02-thumb.jpg", original: "images/prj-08/frame-02.jpg" },
+      { src: "images/prj-08/web/frame-03.jpg", thumb: "images/prj-08/web/frame-03-thumb.jpg", original: "images/prj-08/frame-03.jpg" },
+      { src: "images/prj-08/web/frame-04.jpg", thumb: "images/prj-08/web/frame-04-thumb.jpg", original: "images/prj-08/frame-04.jpg" },
 
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
@@ -347,15 +349,15 @@ const PROJECTS = [
     title: "Недвижимость",
     // Дополнительная строка под названием.
     subtitle: "Реклама",
-    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-09/web/frame-01.jpg",
+    // Картинка главной сетки — уменьшенная копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-09/web/frame-01-thumb.jpg",
     // Полное описание на странице проекта.
     description: "",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
-    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
+    // thumb — копия для ячеек, src — 1920 px, original — исходный файл 4K для полного экрана.
     frames: [
-      { src: "images/prj-09/web/frame-01.jpg", original: "images/prj-09/frame-01.jpg" },
-      { src: "images/prj-09/web/frame-02.jpg", original: "images/prj-09/frame-02.jpg" },
+      { src: "images/prj-09/web/frame-01.jpg", thumb: "images/prj-09/web/frame-01-thumb.jpg", original: "images/prj-09/frame-01.jpg" },
+      { src: "images/prj-09/web/frame-02.jpg", thumb: "images/prj-09/web/frame-02-thumb.jpg", original: "images/prj-09/frame-02.jpg" },
 
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
@@ -384,19 +386,19 @@ const PROJECTS = [
     title: "Джаз-бэнд",
     // Дополнительная строка под названием.
     subtitle: "Клип",
-    // Картинка главной сетки — лёгкая копия. Автоматически центрируется и заполняет блок.
-    preview: "images/prj-10/web/frame-01.jpg",
+    // Картинка главной сетки — уменьшенная копия. Автоматически центрируется и заполняет блок.
+    preview: "images/prj-10/web/frame-01-thumb.jpg",
     // Полное описание на странице проекта.
     description: "",
     // Первый кадр — крупный слева, два следующих — справа. Остальные — сетка по три без обрезки.
-    // src — лёгкая копия для страницы, original — исходный файл 4K для полного экрана.
+    // thumb — копия для ячеек, src — 1920 px, original — исходный файл 4K для полного экрана.
     frames: [
-      { src: "images/prj-10/web/frame-01.jpg", original: "images/prj-10/frame-01.jpg" },
-      { src: "images/prj-10/web/frame-02.jpg", original: "images/prj-10/frame-02.jpg" },
-      { src: "images/prj-10/web/frame-03.jpg", original: "images/prj-10/frame-03.jpg" },
-      { src: "images/prj-10/web/frame-04.jpg", original: "images/prj-10/frame-04.jpg" },
-      { src: "images/prj-10/web/frame-05.jpg", original: "images/prj-10/frame-05.jpg" },
-      { src: "images/prj-10/web/frame-06.jpg", original: "images/prj-10/frame-06.jpg" },
+      { src: "images/prj-10/web/frame-01.jpg", thumb: "images/prj-10/web/frame-01-thumb.jpg", original: "images/prj-10/frame-01.jpg" },
+      { src: "images/prj-10/web/frame-02.jpg", thumb: "images/prj-10/web/frame-02-thumb.jpg", original: "images/prj-10/frame-02.jpg" },
+      { src: "images/prj-10/web/frame-03.jpg", thumb: "images/prj-10/web/frame-03-thumb.jpg", original: "images/prj-10/frame-03.jpg" },
+      { src: "images/prj-10/web/frame-04.jpg", thumb: "images/prj-10/web/frame-04-thumb.jpg", original: "images/prj-10/frame-04.jpg" },
+      { src: "images/prj-10/web/frame-05.jpg", thumb: "images/prj-10/web/frame-05-thumb.jpg", original: "images/prj-10/frame-05.jpg" },
+      { src: "images/prj-10/web/frame-06.jpg", thumb: "images/prj-10/web/frame-06-thumb.jpg", original: "images/prj-10/frame-06.jpg" },
     ],
     // Видео: null — пока нет; варианты подключения описаны в инструкции.
     video: null,

@@ -50,6 +50,8 @@
   };
   const link = (p) => 'project.html?id=' + encodeURIComponent(p.id);
   const frameSrc = (f) => typeof f === 'string' ? f : f.src;
+  // Уменьшенная копия для ячеек сетки; может отсутствовать.
+  const frameThumb = (f) => typeof f === 'object' && f.thumb ? f.thumb : null;
   function initLightbox(frames, projectTitle) {
     const viewer = document.createElement('dialog');
     viewer.className = 'lightbox';
@@ -237,6 +239,23 @@
         paintZoom();
       }).catch(() => {});
     }
+    // После первого открытия полного экрана заранее, по одному, загружает
+    // оригиналы проекта — следующие кадры открываются сразу в полном разрешении.
+    // На сенсорных экранах и при включённой экономии трафика фоновая загрузка не выполняется.
+    let originalsQueued = false;
+    function prefetchAllOriginals() {
+      if (originalsQueued) return; originalsQueued = true;
+      if (matchMedia('(pointer: coarse)').matches) return;
+      if (navigator.connection && navigator.connection.saveData) return;
+      let i = 0;
+      const step = () => {
+        if (i >= frames.length) return;
+        const im = new Image();
+        im.onload = im.onerror = () => { i += 1; setTimeout(step, 300); };
+        im.src = originalSrc(frames[i]);
+      };
+      step();
+    }
     async function showFrame(index, direction = 0, firstOpen = false) {
       hideHint(firstOpen); hintAllowed = firstOpen;
       loadingFrame = true; resetZoom();
@@ -298,6 +317,7 @@
       viewer.querySelector('.lightbox-prev').hidden = frames.length < 2;
       viewer.querySelector('.lightbox-next').hidden = frames.length < 2;
       showFrame(index, 0, true);
+      prefetchAllOriginals();
       // Настоящий полноэкранный режим, если браузер разрешает. Иначе — на всё окно.
       if (viewer.requestFullscreen && document.fullscreenEnabled) {
         viewer.requestFullscreen().then(()=>{
@@ -310,6 +330,13 @@
       if (e.key === 'Tab') document.querySelectorAll('.still-open.is-viewer-return').forEach(button => button.classList.remove('is-viewer-return'));
     }, {capture:true});
     document.querySelectorAll('.still-open').forEach(button=>button.addEventListener('click',()=>openViewer(Number(button.dataset.frameIndex),button)));
+    // Наведение на кадр заранее начинает загрузку его оригинала: к моменту
+    // клика файл обычно уже скачан и полный экран открывается мгновенно.
+    document.querySelectorAll('.still-open').forEach(button=>button.addEventListener('pointerenter',e=>{
+      if (e.pointerType !== 'mouse') return;
+      const f = frames[Number(button.dataset.frameIndex)];
+      if (f) { const im = new Image(); im.src = originalSrc(f); }
+    }));
     closeButton.addEventListener('click',closeViewer);
     viewer.querySelector('.lightbox-prev').addEventListener('click',()=>showFrame(active-1,-1));
     viewer.querySelector('.lightbox-next').addEventListener('click',()=>showFrame(active+1,1));
@@ -435,7 +462,7 @@
     });
     function renderGrid() {
       const projects = SITE.projects;
-      qs('#grid').innerHTML = projects.map((p,i) => `<a class="frame-link" href="${link(p)}" aria-label="${esc(p.title + (p.subtitle ? ' — ' + p.subtitle : ''))}"><img src="${esc(safeUrl(p.preview))}" alt="${esc(p.title)}: превью" ${i>4 ? 'loading="lazy"' : ''}><span class="scrim" aria-hidden="true"></span><span class="frame-copy"><strong>${esc(p.title)}</strong>${p.subtitle ? '<small>'+esc(p.subtitle)+'</small>' : ''}</span></a>`).join('');
+      qs('#grid').innerHTML = projects.map((p,i) => `<a class="frame-link" href="${link(p)}" aria-label="${esc(p.title + (p.subtitle ? ' — ' + p.subtitle : ''))}"><img src="${esc(safeUrl(p.preview))}" alt="${esc(p.title)}: превью" ${i===0 ? 'fetchpriority="high" ' : ''}${i>4 ? 'loading="lazy"' : ''}><span class="scrim" aria-hidden="true"></span><span class="frame-copy"><strong>${esc(p.title)}</strong>${p.subtitle ? '<small>'+esc(p.subtitle)+'</small>' : ''}</span></a>`).join('');
       qs('#emptyState').hidden = projects.length !== 0;
     }
     // qs('#demoNote').textContent = SITE.projects.some(p=>p.demo) ? '' : '';
@@ -454,7 +481,12 @@
     qs('meta[name="description"]').content = p.description;
     const frames = p.frames?.length ? p.frames : [p.preview];
     function renderStill(f, i, extraClass = '') {
-      return `<figure class="still${extraClass ? ' ' + extraClass : ''}"><button class="still-open" type="button" data-frame-index="${i}" aria-label="Открыть кадр ${i+1} в полном размере"><img src="${esc(safeUrl(frameSrc(f)))}" alt="${esc(typeof f === 'object' && f.alt ? f.alt : p.title + ' — кадр ' + (i+1))}"${i>3?' loading="lazy"':''}></button>${typeof f === 'object' && f.caption ? `<figcaption>${esc(f.caption)}</figcaption>` : ''}</figure>`;
+      const src = safeUrl(frameSrc(f)), thumb = frameThumb(f);
+      const alt = esc(typeof f === 'object' && f.alt ? f.alt : p.title + ' — кадр ' + (i+1));
+      // Браузер сам выбирает копию под экран: 1280 px для ячеек сетки, 1920 px для большого кадра.
+      const sizes = extraClass === 'feature-main' ? '(max-width: 700px) 100vw, 66vw' : '(max-width: 700px) 50vw, 33vw';
+      const srcset = thumb ? `${esc(safeUrl(thumb))} 1280w, ${esc(src)} 1920w` : '';
+      return `<figure class="still${extraClass ? ' ' + extraClass : ''}"><button class="still-open" type="button" data-frame-index="${i}" aria-label="Открыть кадр ${i+1} в полном размере"><img src="${esc(thumb || src)}"${srcset ? ` srcset="${srcset}" sizes="${sizes}"` : ''} alt="${alt}"${i === 0 ? ' fetchpriority="high"' : ''}${i > 3 ? ' loading="lazy"' : ''}></button>${typeof f === 'object' && f.caption ? `<figcaption>${esc(f.caption)}</figcaption>` : ''}</figure>`;
     }
     function renderFeature() {
       return `<div class="feature-stills feature-count-${Math.min(frames.length, 3)}">${frames.map((f, i) => renderStill(f, i, i === 0 ? 'feature-main' : (i < 3 ? 'feature-side feature-side-' + i : ''))).join('')}</div>`;
