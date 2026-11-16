@@ -1,0 +1,31 @@
+  // ==================== НОВАЯ РАБОТА ====================
+  {
+    id: 'my-project',                    // уникальный адрес, без пробелов
+    title: 'Название проекта',           // по центру превью
+    subtitle: 'Краткая дополнительная строка',
+    preview: 'images/my-project/preview.jpg',
+    description: 'Опишите задачу, настроение, цветовое решение и свою роль.',
+    // Первый кадр — крупный слева; второй и третий — справа. С четвёртого — сетка по три.
+    frames: [
+      'images/my-project/frame-01.jpg',
+      'images/my-project/frame-02.jpg',
+      // Для отдельного оригинала: { src: "images/my-project/preview.jpg", original: "images/my-project/original.jpg" },
+      // Добавляйте новые кадры здесь. Последняя запятая допустима.
+    ],
+    video: { provider: 'file', src: 'video/my-project.mp4', start: 0, end: 30 },
+    // Если видео пока нет, замените строку выше на video: null,
+    // Сравнение: укажите исходные кадры одного плана на разных этапах.
+    // label — редактируемая подпись; src — путь к оригиналу без уменьшения.
+    comparison: {
+      frames: [
+        { label: "Log", src: "" },
+        { label: "Rec.709", src: "" },
+        { label: "Primaries", src: "" },
+        { label: "Color & skin Fix", src: "" },
+        { label: "Grade", src: "" },
+        { label: "Final", src: "" },
+      ],
+    },
+    // Чтобы скрыть сравнение: comparison: false,
+    demo: false,
+  },

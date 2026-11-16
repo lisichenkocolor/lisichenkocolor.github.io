@@ -1,0 +1,325 @@
+:root{color-scheme:dark;--canvas:#191919;--surface:#202020;--raised:#2b2b2a;--text:#ededec;--muted:#aaa9a5;--border:rgba(255,255,255,.16);--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--text);font:16px/1.5 var(--sans);-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button,button,a,button{cursor:pointer}[hidden]{display:none!important}:focus-visible{outline:2px solid #8dbcf3;outline-offset:5px}button,a{touch-action:manipulation}.topbar{height:48px;padding:0 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(25,25,25,.96)}.brand{font-size:14px;color:var(--muted);display:flex;align-items:center;min-height:44px}.topbar-note{color:var(--muted);font-size:14px;letter-spacing:.12em}.page{max-width:1328px;margin:auto;padding:56px 40px 32px}.hero{display:flex;justify-content:space-between;align-items:flex-start;gap:40px}.hero-main{max-width:680px}.eyebrow{font-size:14px;color:var(--muted);margin:0 0 16px}h1{font-size:40px;line-height:1.1;letter-spacing:-.025em;font-weight:800;margin:0 0 16px}.hero-desc{font-size:16px;color:var(--muted);margin:0;max-width:560px}.hero-links{display:flex;flex-direction:column;gap:4px;padding-top:22px}.social{min-height:44px;display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted)}.social b{font-weight:500;color:var(--text)}.social:hover b,.back-link:hover{color:#8dbcf3}.divider{border:0;border-top:1px solid var(--border);margin:40px 0 24px}h2{font-size:18px;font-weight:700;margin:0}.portfolio-page{max-width:none;padding-left:24px;padding-right:24px}
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.frame-link{position:relative;display:block;overflow:hidden;aspect-ratio:4/3;background:var(--surface);border-radius:8px}
+.frame-link img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+.frame-link .scrim{position:absolute;inset:0;background:rgba(0,0,0,.54);opacity:0;transition:opacity .22s ease}
+.frame-copy{position:absolute;inset:0;padding:16px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#fff;opacity:0;transition:opacity .22s ease;overflow-wrap:anywhere}
+.frame-copy strong{font-size:20px;line-height:1.2;font-weight:650;letter-spacing:-.02em}
+.frame-copy small{font-size:14px;line-height:1.45;margin-top:8px}
+.frame-link:hover .scrim,.frame-link:focus-visible .scrim,.frame-link:hover .frame-copy,.frame-link:focus-visible .frame-copy{opacity:1}
+.foot{margin-top:64px;border-top:1px solid var(--border);padding-top:24px;color:var(--muted);font-size:14px}.foot>div{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}.demo-note{margin:0 0 20px;max-width:760px}.empty{padding:48px 0;color:var(--muted)}.back-link{display:inline-flex;min-height:44px;align-items:center;color:var(--muted);font-size:14px;margin:0 0 32px}.project-header{display:block;text-align:center;margin-bottom:32px}.project-header h1{margin:0 0 12px}.project-subtitle{margin:0;color:var(--muted)}.project-cover{width:100%;max-height:680px;object-fit:cover;display:block;border-radius:8px}.project-description{display:block;padding:40px 0;border-bottom:1px solid var(--border)}.project-description p{max-width:760px;margin:0 auto;color:var(--muted);white-space:pre-line;text-align:center}.project-section{margin-top:40px}.section-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.section-heading span{color:var(--muted);font-size:14px}.stills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;align-items:start}.still{margin:0}.still img{width:100%;height:auto;aspect-ratio:auto;object-fit:contain;object-position:center;display:block;border-radius:0}.still figcaption{font-size:14px;color:var(--muted);margin-top:12px}.video-wrap{aspect-ratio:16/9;background:#111;border-radius:8px;overflow:hidden}.video-wrap iframe,.video-wrap video{width:100%;height:100%;display:block;border:0}.video-empty{border:1px solid var(--border);border-radius:8px;padding:24px 32px;color:var(--muted);background:var(--surface)}.video-empty p{margin:0;max-width:760px}.video-empty p+p{margin-top:8px}.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.skip-link{position:fixed;top:8px;left:8px;padding:12px;background:var(--text);color:var(--canvas);z-index:100;transform:translateY(-200%)}.skip-link:focus{transform:none}.noscript{padding:24px}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hero-links{padding-top:0}.hero{gap:24px}.social{flex-wrap:wrap;gap:4px 10px}.social b{overflow-wrap:anywhere}}
+@media(max-width:700px){.page{padding:32px 20px 24px}.topbar{padding:0 20px}.topbar-note{font-size:14px;letter-spacing:.05em}.hero{display:block}.hero-links{margin-top:20px;gap:0}.social{gap:12px}h1{font-size:32px}.divider{margin:28px 0 16px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.frame-copy{padding:12px;opacity:1}.frame-copy strong{font-size:16px}.frame-copy small{font-size:14px;margin-top:4px}.frame-link .scrim{opacity:1;background:rgba(0,0,0,.54)}.foot{margin-top:40px}.project-header{display:block;text-align:center;margin-bottom:32px}.back-link{margin-bottom:24px}.project-description{grid-template-columns:1fr;gap:16px;padding:28px 0}.stills{grid-template-columns:repeat(2,minmax(0,1fr))}.project-section{margin-top:28px}.video-empty{padding:20px}}
+@media(hover:none){.frame-copy{opacity:1}.frame-link .scrim{opacity:1;background:rgba(0,0,0,.54)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+
+/* Шапка, контакты и подвал полностью перенесены из исходного сайта. */
+.source-topbar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+  position: sticky;
+  top: 0;
+  background: rgba(25, 25, 25, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 40;
+}
+.source-topbar-title { font-size: 13px; color: rgba(255, 255, 255, 0.55); font-weight: 500; }
+
+.source-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.source-hero .hero-main { max-width: 560px; }
+.source-hero .hero-title {
+  font-size: 40px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 16px;
+}
+.source-hero .hero-desc {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 15px;
+  margin: 0 0 20px;
+  max-width: 480px;
+}
+.source-hero .hero-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.source-hero .hero-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.source-hero .social {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.15s ease;
+}
+.source-hero .social:hover { color: var(--text); }
+.source-hero .social svg { width: 16px; height: 16px; flex: none; }
+.source-hero .social b { color: var(--text); font-weight: 500; }
+
+.source-divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.11);
+  margin: 44px 0 28px;
+}
+
+.source-foot {
+  margin-top: 56px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.11);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+}
+
+
+.source-hero,.source-divider,.source-foot{max-width:860px;margin-left:auto;margin-right:auto}
+.source-hero .social{min-height:0;flex-wrap:nowrap;touch-action:manipulation}
+.source-hero .social svg{overflow:visible}
+.source-hero .social b{overflow-wrap:normal}
+.source-hero .hero-links{margin-top:0}
+.source-demo-note{margin:40px auto 0;max-width:860px;color:var(--muted);font-size:14px}
+.source-topbar-title{display:inline-flex;align-items:center;height:44px}
+.source-hero .hero-desc{line-height:1.5}
+@media(max-width:640px){.source-hero{flex-direction:column;gap:22px}.source-hero .hero-title{font-size:32px}.source-hero .social span{overflow-wrap:anywhere}.source-hero .social b{overflow-wrap:anywhere}.source-hero .hero-main,.source-hero .hero-links{max-width:100%;min-width:0}}
+
+.source-title-emoji{display:inline-block;width:1.15em;height:1.03em;object-fit:contain;vertical-align:-.12em}
+
+.project-return{margin-top:24px}.project-return .back-link{margin-bottom:0}
+
+@media(max-width:700px){.portfolio-page{padding-left:16px;padding-right:16px}}
+
+/* Галерея проекта — те же внешние отступы, что у главной сетки. */
+.project-page{max-width:none;padding-left:24px;padding-right:24px}
+.project-header,.project-description,.project-page .project-section:not(.project-frames),.project-return{max-width:1248px;margin-left:auto;margin-right:auto}
+@media(max-width:700px){.project-page{padding-left:16px;padding-right:16px}}
+
+/* Оригинальные кадры: полноэкранный просмотр без обрезки и скруглений. */
+.still-open{display:block;width:100%;padding:0;border:0;border-radius:0;background:transparent;color:inherit;cursor:zoom-in}
+.still-open:focus-visible{outline:2px solid #eee;outline-offset:-3px}
+.lightbox{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;border-radius:0;background:#080808;color:#fff;overflow:hidden;z-index:1000}
+.lightbox:not([open]){display:none}
+.lightbox::backdrop{background:#080808}
+.lightbox:fullscreen{width:100%;height:100%;background:#080808}
+.lightbox-stage{position:absolute;inset:40px 64px;overflow:hidden}
+.lightbox-image{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;display:block;border-radius:0}
+.lightbox-button{position:absolute;z-index:2;display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid #737371;border-radius:8px;background:rgba(20,20,20,.9);color:white;cursor:pointer;transition:background .12s ease}
+.lightbox-button:hover{background:#383836}
+.lightbox-close{top:max(16px,env(safe-area-inset-top));left:max(16px,env(safe-area-inset-left))}
+.lightbox-prev{left:max(12px,env(safe-area-inset-left));top:50%;transform:translateY(-50%)}
+.lightbox-next{right:max(12px,env(safe-area-inset-right));top:50%;transform:translateY(-50%)}
+.lightbox-next svg{transform:rotate(180deg)}
+.lightbox-message{position:absolute;z-index:1;left:50%;top:50%;transform:translate(-50%,-50%);max-width:calc(100% - 144px);margin:0;padding:12px 16px;background:#202020;color:#fff;border-radius:8px;text-align:center;font-size:16px;line-height:1.5}
+@media(max-width:700px){.lightbox-stage{inset:64px 8px 24px}.lightbox-prev{left:8px}.lightbox-next{right:8px}.lightbox-close{left:max(12px,env(safe-area-inset-left));top:max(12px,env(safe-area-inset-top))}}
+
+/* Единая сетка: одинаковые колонки и зазоры во всей галерее. */
+.project-page .project-frames{width:calc(100% + 48px);margin-left:-24px;margin-right:-24px}
+.feature-stills{--frame-gap:8px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--frame-gap);align-items:stretch}
+.feature-stills .still{display:flex;flex-direction:column;min-width:0;min-height:0;margin:0}
+.feature-stills .still-open{position:relative;aspect-ratio:16/9;background:#080808;overflow:hidden;flex:none}
+.feature-stills .still img{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:contain}
+.feature-stills .feature-main{grid-column:span 2;grid-row:span 2}
+.feature-stills .feature-main .still-open{aspect-ratio:auto;flex:1;min-height:0;height:0}
+.feature-stills figcaption{flex:none;margin-top:8px}
+.feature-count-1 .feature-main{grid-column:1 / -1;grid-row:auto}
+.feature-count-1 .feature-main .still-open{flex:none;height:auto;aspect-ratio:16/9}
+.feature-count-2 .feature-main{grid-row:auto}
+.feature-count-2 .feature-main .still-open{flex:none;height:auto;aspect-ratio:16/9}
+@media(max-width:700px){
+  .project-page .project-frames{width:calc(100% + 32px);margin-left:-16px;margin-right:-16px}
+  .feature-stills{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .feature-stills .feature-main{grid-column:1 / -1;grid-row:auto}
+  .feature-stills .feature-main .still-open{aspect-ratio:16/9;flex:none;height:auto}
+}
+
+/* Масштаб оригинального кадра: интерфейс вне области изображения. */
+.lightbox-stage{inset:80px 64px 32px;touch-action:none;user-select:none;cursor:zoom-in}
+.lightbox-stage.is-zoomed{cursor:grab}
+.lightbox-stage.is-dragging{cursor:grabbing}
+.lightbox-image{inset:auto;left:50%;top:50%;max-width:none;max-height:none;object-fit:contain;transform-origin:center;user-select:none;pointer-events:none}
+.lightbox-zoom{position:absolute;z-index:3;top:max(16px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:4px;padding:3px;background:#141414;border:1px solid #737371;border-radius:8px;color:#fff}
+.lightbox-zoom button{display:grid;place-items:center;min-width:44px;min-height:44px;padding:0 10px;border:0;border-radius:4px;background:transparent;color:#fff;font:inherit;cursor:pointer}
+.lightbox-zoom .zoom-in,.lightbox-zoom .zoom-out{font-size:24px;line-height:1}
+.lightbox-zoom button:hover:not(:disabled){background:#383836}
+.lightbox-zoom button:disabled{color:#919191;cursor:default}
+.zoom-level{min-width:44px;text-align:center;font-size:14px;font-variant-numeric:tabular-nums}
+.zoom-fit{font-size:14px!important}
+@media(max-width:700px){
+ .lightbox-stage{inset:72px 8px 84px}
+ .lightbox-zoom{top:auto;bottom:max(16px,env(safe-area-inset-bottom))}
+}
+
+/* Чистые навигационные значки, мягкий свет вместо обводки. */
+.lightbox{font:inherit}
+.lightbox-button{width:56px;height:64px;border:0;border-radius:0;background:transparent;isolation:isolate}
+.lightbox-button:hover{background:transparent}
+.lightbox-button::before{content:"";position:absolute;inset:0 -4px;z-index:-1;border-radius:8px;background:rgba(255,255,255,.17);filter:blur(12px);opacity:0;transform:scale(.86);transition:opacity 180ms ease,transform 180ms ease;pointer-events:none}
+.lightbox-button svg{display:block;transition:transform 180ms ease;filter:drop-shadow(0 1px 3px rgba(0,0,0,.55));pointer-events:none}
+.lightbox-button:hover::before{opacity:1;transform:scale(1)}
+.lightbox-button:hover svg{transform:scale(1.18)}
+.lightbox-button:focus-visible{outline:0}
+.lightbox-close{left:auto;right:max(16px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));height:56px}
+.lightbox-prev{left:32px;top:50%;transform:translate(-50%,-50%)}
+.lightbox-next{right:32px;top:50%;transform:translate(50%,-50%)}
+.lightbox-next svg{transform:rotate(180deg)}
+.lightbox-next:hover svg{transform:rotate(180deg) scale(1.18)}
+.lightbox-zoom .zoom-fit{width:44px;padding:0}
+.zoom-fit svg{transition:transform 180ms ease}
+.zoom-fit:hover:not(:disabled) svg{transform:rotate(-30deg)}
+/* Подсказка поверх кадра: мягкая дымка без прямоугольных границ. */
+.lightbox-hint{position:absolute;z-index:1;box-sizing:border-box;margin:0;padding:22px 24px 34px;min-height:88px;pointer-events:none;text-align:center;font:inherit;font-size:16px;line-height:1.5;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.65);background:radial-gradient(ellipse at 50% 42%,rgba(0,0,0,.57) 0%,rgba(0,0,0,.34) 38%,rgba(0,0,0,0) 74%);opacity:0;visibility:hidden;transform:translateY(-3px);transition:opacity 220ms ease,transform 220ms ease,visibility 0s linear 220ms}
+.lightbox-hint.is-visible{opacity:1;visibility:visible;transform:translateY(0);transition:opacity 220ms ease,transform 220ms ease,visibility 0s}
+.lightbox-hint.is-instant{transition:none}
+@media(max-width:700px){
+ .lightbox-close{left:auto;right:max(8px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top))}
+ .lightbox-hint{font-size:14px;padding:16px 20px 28px;min-height:88px}
+}
+@media(prefers-reduced-motion:reduce){
+ .lightbox-button svg,.lightbox-button::before,.zoom-fit svg,.lightbox-hint,.lightbox-hint.is-visible{transition:none}
+}
+
+/* v14: внешний шаг галереи совпадает с промежутками между кадрами. */
+.project-page .project-frames{padding:8px}
+/* Мягкие вытянутые боковые области без квадратной обводки. */
+.lightbox-prev,.lightbox-next{width:var(--navigation-width,88px);height:min(390px,40dvh)}
+.lightbox-prev::before,.lightbox-next::before{inset:0;filter:none;border-radius:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.13) 28%,rgba(255,255,255,.13) 72%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0%,#000 20%,#000 80%,transparent 100%)}
+/* Размытие подсказки по всей видимой ширине кадра, без резких краёв. */
+.lightbox-hint{height:80px;min-height:0;padding:0 24px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:none;isolation:isolate;transform:none;transition:opacity 220ms ease,visibility 0s linear 220ms}
+.lightbox-hint::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(0,0,0,.32);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 62%,transparent 100%)}
+.lightbox-hint.is-visible{transform:none;transition:opacity 220ms ease,visibility 0s}
+.lightbox-hint.is-instant{transition:none}
+@media(max-width:700px){
+ .lightbox-prev,.lightbox-next{width:48px;height:160px}
+ .lightbox-hint{height:80px;min-height:0;padding:0 20px}
+}
+@media(prefers-reduced-motion:reduce){.lightbox-hint,.lightbox-hint.is-visible{transition:none}}
+
+/* v15: непрерывный градиент от самого края кадра, без прозрачного зазора. */
+.lightbox-hint{height:100px;font-family:var(--sans);font-size:18px;font-weight:400;line-height:1.5;letter-spacing:normal;align-items:flex-start;padding:24px 24px 0}
+.lightbox-hint::before{background:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 100%);mask-image:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+/* Системные синие рамки не попадают в просмотрщик. */
+.lightbox:focus,.lightbox:focus-visible,.lightbox button:focus,.lightbox button:focus-visible{outline:none}
+/* Доступный маркер появляется лишь при переходе Tab, не от других клавиш. */
+.lightbox.is-keyboard-navigation .lightbox-button:focus-visible::after{content:"";position:absolute;width:24px;height:2px;left:50%;top:calc(50% + 22px);transform:translateX(-50%);background:#eee;pointer-events:none}
+.lightbox.is-keyboard-navigation .lightbox-zoom button:focus-visible{box-shadow:inset 0 -2px #eee;background:#383836}
+@media(max-width:700px){.lightbox-hint{height:100px;font-size:16px;padding:20px 16px 0}}
+
+/* v16: сравнение — фиксированное окно 16:9, 3/5 ширины страницы. */
+.project-page .project-section.project-comparison{max-width:none;margin-top:48px}
+.project-comparison>.section-heading{max-width:1248px;margin-left:auto;margin-right:auto}
+.comparison-player{width:60vw;max-width:100%;margin:0 auto;font-family:var(--sans)}
+.comparison-window{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:var(--surface)}
+.comparison-picture{position:absolute;inset:0}
+.comparison-image{display:block;width:100%;height:100%;object-fit:cover;object-position:center;transition:none!important;animation:none!important;border-radius:0;user-select:none}
+.comparison-status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;margin:0;padding:24px 64px;font:16px/1.5 var(--sans);color:var(--muted)}
+.comparison-arrow{position:absolute;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:48px;height:64px;padding:0;border:0;border-radius:0;background:transparent;color:white;cursor:pointer;transition:none}
+.comparison-arrow::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse,rgba(0,0,0,.5),transparent 72%);pointer-events:none}
+.comparison-arrow:hover::before{background:radial-gradient(ellipse,rgba(0,0,0,.8),transparent 72%)}
+.comparison-arrow svg{position:relative;pointer-events:none;filter:drop-shadow(0 1px 2px #000)}
+.comparison-prev{left:0}.comparison-next{right:0}.comparison-next svg{transform:rotate(180deg)}
+.comparison-path{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;column-gap:8px;row-gap:0;margin:12px 0 0;text-align:center}
+.comparison-path button{position:relative;min-height:44px;padding:8px 2px;border:0;background:none;color:var(--muted);font:16px/1.5 var(--sans);cursor:pointer;white-space:nowrap;transition:none}
+.comparison-path button:hover{color:var(--text)}
+.comparison-path button[aria-pressed="true"]{color:#fff;text-decoration:underline;text-underline-offset:7px;text-decoration-thickness:2px}
+.comparison-separator{display:inline-flex;align-items:center;font-size:16px;color:var(--muted);user-select:none}
+.comparison-player:focus-visible{outline:1px solid #eee;outline-offset:6px}
+.comparison-player button:focus-visible{outline:2px solid #eee;outline-offset:2px}
+@media(max-width:700px){
+ .project-page .project-comparison{margin-top:32px}
+ .comparison-player{width:100%}
+ .comparison-path{column-gap:6px;margin-top:8px}
+ .comparison-path button{font-size:14px;padding:8px 1px}
+ .comparison-separator{font-size:14px}
+ .comparison-status{font-size:14px;padding:16px 52px}
+ .comparison-arrow{width:44px;height:56px}
+}
+
+/* v17: после закрытия просмотрщика фокус не оставляет полос на кадре. */
+.still-open.is-viewer-return:focus,.still-open.is-viewer-return:focus-visible{outline:none}
+/* Стрелки сравнения находятся в отдельных боковых полях, а не поверх кадра. */
+.comparison-player{width:calc(60vw + 128px)}
+.comparison-stage{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;column-gap:16px;align-items:center}
+.comparison-window{grid-column:2;grid-row:1}
+.comparison-stage .comparison-arrow{position:relative;top:auto;left:auto;right:auto;transform:none;grid-row:1;align-self:center;justify-self:center;width:48px;height:min(240px,28vw)}
+.comparison-stage .comparison-prev{grid-column:1}
+.comparison-stage .comparison-next{grid-column:3}
+.comparison-arrow::before{background:radial-gradient(ellipse,rgba(255,255,255,.06),transparent 72%)}
+.comparison-arrow:hover::before{background:radial-gradient(ellipse,rgba(255,255,255,.16),transparent 72%)}
+@media(max-width:700px){
+ .comparison-player{width:100%}
+ .comparison-stage{grid-template-columns:44px minmax(0,1fr) 44px;column-gap:4px}
+ .comparison-stage .comparison-arrow{width:44px;height:80px}
+}
+
+/* v18: чистые значки. Размеры, координаты и области нажатия НЕ меняются. */
+.lightbox-button::before,.comparison-arrow::before{content:none;background:none;filter:none}
+.lightbox-button,.comparison-arrow{color:#c0c0bd;transition:color 140ms ease;background:transparent}
+.lightbox-button:hover,.comparison-arrow:hover{color:#fff;background:transparent}
+.lightbox-button svg,.comparison-arrow svg{filter:none;transition:none}
+.lightbox-prev svg,.lightbox-prev:hover svg,.lightbox-close svg,.lightbox-close:hover svg{transform:none}
+.lightbox-next svg,.lightbox-next:hover svg{transform:rotate(180deg)}
+.comparison-prev svg,.comparison-prev:hover svg{transform:none}
+.comparison-next svg,.comparison-next:hover svg{transform:rotate(180deg)}
+/* Круговая стрелка сброса также без поворота и подложки при наведении. */
+.lightbox-zoom .zoom-fit{color:#c0c0bd}
+.lightbox-zoom .zoom-fit:hover:not(:disabled){color:#fff;background:transparent}
+.zoom-fit svg,.zoom-fit:hover:not(:disabled) svg{transform:none;filter:none;transition:none}
+/* Стрелки возврата и переходов: нейтральный цвет вместо синего. */
+.back-link:hover,.back-link:focus-visible{color:#fff;background:transparent;text-shadow:none;filter:none}
+.comparison-separator svg{filter:none;transform:none}
+/* v19: фон по всей ширине кадра; 70% сверху, плавный сход до нуля.
+   Косинусная кривая с мягким окончанием вместо обрезанного эллипса. */
+.lightbox-hint{height:160px;max-height:100%;overflow:hidden;text-shadow:0 1px 3px rgba(0,0,0,.65)}
+.lightbox-hint::before{
+  inset:0;width:100%;transform:none;
+  background:linear-gradient(to bottom,
+    rgba(0,0,0,0.7000) 0%,
+    rgba(0,0,0,0.6957) 5%,
+    rgba(0,0,0,0.6829) 10%,
+    rgba(0,0,0,0.6619) 15%,
+    rgba(0,0,0,0.6332) 20%,
+    rgba(0,0,0,0.5975) 25%,
+    rgba(0,0,0,0.5557) 30%,
+    rgba(0,0,0,0.5089) 35%,
+    rgba(0,0,0,0.4582) 40%,
+    rgba(0,0,0,0.4048) 45%,
+    rgba(0,0,0,0.3500) 50%,
+    rgba(0,0,0,0.2952) 55%,
+    rgba(0,0,0,0.2418) 60%,
+    rgba(0,0,0,0.1911) 65%,
+    rgba(0,0,0,0.1443) 70%,
+    rgba(0,0,0,0.1025) 75%,
+    rgba(0,0,0,0.0668) 80%,
+    rgba(0,0,0,0.0381) 85%,
+    rgba(0,0,0,0.0171) 90%,
+    rgba(0,0,0,0.0043) 95%,
+    rgba(0,0,0,0.0000) 100%);
+  mask-image:none;filter:none;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+}
+@media(max-width:700px){.lightbox-hint{height:128px}}
+
+/* v20:Ссылки в тексте описания: адрес Instagram показывается как @nickname. */
+.project-description a{color:var(--text);text-decoration:underline;text-decoration-color:rgba(255,255,255,.3);text-underline-offset:3px;transition:color 140ms ease,text-decoration-color 140ms ease}
+.project-description a:hover,.project-description a:focus-visible{color:#8dbcf3;text-decoration-color:#8dbcf3}
+.project-description a.text-mention{font-weight:500;text-decoration-color:rgba(141,188,243,.55)}
+.project-description a.text-mention:hover,.project-description a.text-mention:focus-visible{text-decoration-color:#8dbcf3}
