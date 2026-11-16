@@ -220,41 +220,53 @@
     }
     watchPixelRatio();
     paintZoom();
-    const originalSrc = f => safeUrl(typeof f === 'object' ? (f.original || f.src) : f);
-    // Лёгкая версия для мгновенного показа: только когда у кадра задан отдельный оригинал.
-    const quickSrc = f => typeof f === 'object' && f.original ? safeUrl(f.src) : null;
+    const originalSrc = f => safeUrl(typeof f === 'object' ? (f.full || f.original || f.src) : f);
+    // Лёгкая версия для мгновенного показа: только когда у кадра есть более тяжёлый оригинал.
+    const quickSrc = f => typeof f === 'object' && (f.full || f.original) ? safeUrl(f.src) : null;
 
-    function preloadNeighbors(index) {
-      if (frames.length < 2) return;
-      [index-1,index+1].forEach(n => {
-        const im = new Image(); im.src = originalSrc(frames[(n+frames.length)%frames.length]);
-      });
+    // —— Очередь фоновых загрузок оригиналов: по одному файлу за раз, чтобы не
+    // делить канал между десятками запросов. Срочные файлы ставятся в начало,
+    // а идущая фоновая загрузка прерывается, как только нужен кадр на экране. ——
+    const queued = new Set(), queueOrder = [];
+    let queueBusy = false, queueLoader = null, fullPaused = false;
+    const absoluteUrl = u => { try { return new URL(u, location.href).href; } catch (_) { return u; } };
+    function enqueueOriginal(url, high = false) {
+      if (!url || url === '#') return;
+      const abs = absoluteUrl(url);
+      if (queued.has(abs)) return;
+      queued.add(abs);
+      if (high) queueOrder.unshift(abs); else queueOrder.push(abs);
+      pumpQueue();
     }
-    // Незаметно подменяет показанную лёгкую версию полным оригиналом, как только он готов.
-    function upgradeToOriginal(im, fullSrc, token) {
-      const hi = new Image(); hi.src = fullSrc;
-      hi.decode().then(() => {
-        if (token !== requestId || !viewer.open || currentImage !== im) return;
-        im.src = fullSrc; // тот же размер на экране, но разрешение исходного файла
-        paintZoom();
-      }).catch(() => {});
+    function pumpQueue() {
+      if (queueBusy || fullPaused) return;
+      const abs = queueOrder.shift();
+      if (!abs) return;
+      queueBusy = true; queueLoader = new Image();
+      queueLoader.onload = queueLoader.onerror = () => { queueBusy = false; queueLoader = null; setTimeout(pumpQueue, 250); };
+      queueLoader.src = abs;
     }
-    // После первого открытия полного экрана заранее, по одному, загружает
-    // оригиналы проекта — следующие кадры открываются сразу в полном разрешении.
-    // На сенсорных экранах и при включённой экономии трафика фоновая загрузка не выполняется.
+    function stopQueue() {
+      // Прерывает текущую фоновую загрузку: канал нужен кадру на экране.
+      if (!queueBusy || !queueLoader) return;
+      const back = queueLoader.src;
+      queueLoader.onload = queueLoader.onerror = null;
+      queueLoader.src = 'about:blank';
+      queueBusy = false; queueLoader = null;
+      queued.delete(back); queueOrder.push(back);
+    }
+    // После открытия полного экрана остальные оригиналы проекта догружаются
+    // в фоне по одному, начиная с соседних кадров. На сенсорных экранах и при
+    // включённой экономии трафика фоновая загрузка не выполняется.
     let originalsQueued = false;
-    function prefetchAllOriginals() {
+    function prefetchAllOriginals(startIndex) {
       if (originalsQueued) return; originalsQueued = true;
       if (matchMedia('(pointer: coarse)').matches) return;
       if (navigator.connection && navigator.connection.saveData) return;
-      let i = 0;
-      const step = () => {
-        if (i >= frames.length) return;
-        const im = new Image();
-        im.onload = im.onerror = () => { i += 1; setTimeout(step, 300); };
-        im.src = originalSrc(frames[i]);
-      };
-      step();
+      for (let off = 1; off <= frames.length; off++) {
+        enqueueOriginal(originalSrc(frames[(startIndex + off) % frames.length]));
+      }
+      pumpQueue();
     }
     async function showFrame(index, direction = 0, firstOpen = false) {
       hideHint(firstOpen); hintAllowed = firstOpen;
@@ -263,14 +275,17 @@
       const token = ++requestId, frame = frames[active], im = new Image();
       im.className = 'lightbox-image';
       im.alt = typeof frame === 'object' && frame.alt ? frame.alt : projectTitle + ' — кадр ' + (active+1);
+      // Канал целиком кадру на экране: фоновая загрузка прерывается.
+      stopQueue(); fullPaused = true;
       // Сначала мгновенно показывается лёгкая версия кадра, затем в фоне
-      // загружается исходный файл — без ресайза, перекодирования и фильтров.
+      // загружается оригинал — без ресайза, перекодирования и фильтров.
       const quick = quickSrc(frame), full = originalSrc(frame);
       im.src = quick || full;
       message.textContent = 'Загрузка кадра…'; message.hidden = false;
       try { await im.decode(); }
       catch (_) {
         if (token !== requestId || !viewer.open) return;
+        fullPaused = false; pumpQueue();
         stage.replaceChildren(); currentImage = null; loadingFrame = false; paintZoom();
         message.textContent = 'Не удалось загрузить кадр. Проверьте путь к оригинальному файлу.';
         return;
@@ -291,8 +306,19 @@
         }
       } else if(oldImage) oldImage.remove();
       viewer.querySelector('.lightbox-announcement').textContent = `Кадр ${active+1} из ${frames.length}`;
-      preloadNeighbors(active);
-      if (quick && quick !== full) upgradeToOriginal(im, full, token);
+      if (quick && quick !== full) {
+        // Оригинал догружается вне очереди (канал уже освобождён), очередь ждёт.
+        const hi = new Image(); hi.src = full;
+        const done = () => { fullPaused = false; pumpQueue(); };
+        hi.decode().then(() => {
+          done();
+          if (token !== requestId || !viewer.open || currentImage !== im) return;
+          im.src = full; // тот же размер на экране, но полное разрешение кадра
+          paintZoom();
+        }).catch(done);
+      } else {
+        fullPaused = false; pumpQueue();
+      }
     }
     function closeViewer() {
       if (!viewer.open) return;
@@ -317,7 +343,7 @@
       viewer.querySelector('.lightbox-prev').hidden = frames.length < 2;
       viewer.querySelector('.lightbox-next').hidden = frames.length < 2;
       showFrame(index, 0, true);
-      prefetchAllOriginals();
+      prefetchAllOriginals(index);
       // Настоящий полноэкранный режим, если браузер разрешает. Иначе — на всё окно.
       if (viewer.requestFullscreen && document.fullscreenEnabled) {
         viewer.requestFullscreen().then(()=>{
@@ -330,13 +356,21 @@
       if (e.key === 'Tab') document.querySelectorAll('.still-open.is-viewer-return').forEach(button => button.classList.remove('is-viewer-return'));
     }, {capture:true});
     document.querySelectorAll('.still-open').forEach(button=>button.addEventListener('click',()=>openViewer(Number(button.dataset.frameIndex),button)));
-    // Наведение на кадр заранее начинает загрузку его оригинала: к моменту
+    // Наведение на кадр ставит его оригинал в начало очереди загрузки: к моменту
     // клика файл обычно уже скачан и полный экран открывается мгновенно.
-    document.querySelectorAll('.still-open').forEach(button=>button.addEventListener('pointerenter',e=>{
-      if (e.pointerType !== 'mouse') return;
-      const f = frames[Number(button.dataset.frameIndex)];
-      if (f) { const im = new Image(); im.src = originalSrc(f); }
-    }));
+    // Случайный пролет мыши над сеткой загрузок не вызывает.
+    let hoverTimer = null, hoverCandidate = null;
+    document.querySelectorAll('.still-open').forEach(button=>{
+      button.addEventListener('pointerenter',e=>{
+        if (e.pointerType !== 'mouse') return;
+        const f = frames[Number(button.dataset.frameIndex)];
+        if (!f) return;
+        hoverCandidate = originalSrc(f);
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(()=>enqueueOriginal(hoverCandidate, true), 250);
+      });
+      button.addEventListener('pointerleave',()=>clearTimeout(hoverTimer));
+    });
     closeButton.addEventListener('click',closeViewer);
     viewer.querySelector('.lightbox-prev').addEventListener('click',()=>showFrame(active-1,-1));
     viewer.querySelector('.lightbox-next').addEventListener('click',()=>showFrame(active+1,1));

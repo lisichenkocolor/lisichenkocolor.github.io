@@ -1,12 +1,13 @@
 # Creates lightweight web copies of every .jpg in the "images" folder.
-# Two tiers are made next to each original, inside a "web" subfolder:
+# Three tiers are made next to each original, inside a "web" subfolder:
 #   web/<name>.jpg        - up to 1920 px, quality 82 (big frame, fullscreen preview)
 #   web/<name>-thumb.jpg  - up to 1280 px, quality 80 (grid cells, home previews)
-# Originals are NEVER modified.
+#   web/<name>-full.jpg   - original resolution, quality 88 (fullscreen view)
+# Comparison frames get only the 1920 px copy. Originals are NEVER modified.
 #
 # Run this after adding new 4K frames, then make sure projects.js points
-# to the web copy in "src", the thumb copy in "thumb" and keeps the 4K
-# path in "original".
+# to the web copy in "src", the thumb copy in "thumb", the full copy in
+# "full" and keeps the 4K path in "original".
 #
 # How to run: double-click make-web-versions.bat
 
@@ -16,7 +17,8 @@ Add-Type -AssemblyName System.Drawing
 $root   = Join-Path $PSScriptRoot 'images'
 $tiers  = @(
   @{ Suffix = '';          MaxW = 1920; Quality = 82 },
-  @{ Suffix = '-thumb';    MaxW = 1280; Quality = 80 }
+  @{ Suffix = '-thumb';    MaxW = 1280; Quality = 80 },
+  @{ Suffix = '-full';     MaxW = 3840; Quality = 88 }
 )
 $minKB   = 500    # files already lighter than this are used as-is
 
@@ -33,8 +35,12 @@ foreach ($f in $files) {
   # Already light enough: the site can use this file directly, no copies needed.
   if ($f.Length -lt $minKB * 1KB) { $alreadyLight++; continue }
 
+  # Comparison frames are shown only in a small window: just the 1920 px copy.
+  $isComparison = $f.FullName -match '\\comparison\\'
+  $fileTiers = if ($isComparison) { @($tiers[0]) } else { $tiers }
+
   $outDir  = Join-Path $f.Directory.FullName 'web'
-  $pending = $tiers | Where-Object {
+  $pending = $fileTiers | Where-Object {
     $p = Join-Path $outDir ($f.BaseName + $_.Suffix + $f.Extension)
     -not (Test-Path -LiteralPath $p) -or (Get-Item -LiteralPath $p).LastWriteTime -lt $f.LastWriteTime
   }
@@ -71,10 +77,11 @@ foreach ($f in $files) {
 
   $webFile = Get-Item -LiteralPath (Join-Path $outDir ($f.BaseName + $f.Extension)) -ErrorAction SilentlyContinue
   $thumbFile = Get-Item -LiteralPath (Join-Path $outDir ($f.BaseName + '-thumb' + $f.Extension)) -ErrorAction SilentlyContinue
+  $fullFile = Get-Item -LiteralPath (Join-Path $outDir ($f.BaseName + '-full' + $f.Extension)) -ErrorAction SilentlyContinue
   $before += $f.Length
-  $after += ($webFile, $thumbFile | Where-Object { $_ } | Measure-Object -Property Length -Sum).Sum
+  $after += ($webFile, $thumbFile, $fullFile | Where-Object { $_ } | Measure-Object -Property Length -Sum).Sum
   $created++
-  Write-Host ("OK  {0}  {1} KB -> {2} KB" -f $f.FullName.Substring($root.Length + 1), [math]::Round($f.Length / 1KB), [math]::Round(($webFile, $thumbFile | Where-Object { $_ } | Measure-Object -Property Length -Sum).Sum / 1KB))
+  Write-Host ("OK  {0}  {1} KB -> {2} KB" -f $f.FullName.Substring($root.Length + 1), [math]::Round($f.Length / 1KB), [math]::Round(($webFile, $thumbFile, $fullFile | Where-Object { $_ } | Measure-Object -Property Length -Sum).Sum / 1KB))
 }
 
 Write-Host ''
