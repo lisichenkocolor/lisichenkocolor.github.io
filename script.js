@@ -52,6 +52,72 @@
   const frameSrc = (f) => typeof f === 'string' ? f : f.src;
   // Уменьшенная копия для ячеек сетки; может отсутствовать.
   const frameThumb = (f) => typeof f === 'object' && f.thumb ? f.thumb : null;
+  // Самая полная версия кадра: оптимизированный 4K, исходный 4K или сам файл.
+  const originalSrc = f => safeUrl(typeof f === 'object' ? (f.full || f.original || f.src) : f);
+
+  // —— Очередь фоновых загрузок: по одному файлу за раз, чтобы не делить канал
+  // между десятками запросов. Срочные файлы ставятся в начало, а идущая
+  // фоновая загрузка прерывается, как только нужен кадр на экране. ——
+  const queued = new Set(), queueOrder = [];
+  let queueBusy = false, queueLoader = null, fullPaused = false;
+  const absoluteUrl = u => { try { return new URL(u, location.href).href; } catch (_) { return u; } };
+  function enqueueOriginal(url, high = false) {
+    if (!url || url === '#') return;
+    const abs = absoluteUrl(url);
+    if (queued.has(abs)) return;
+    queued.add(abs);
+    if (high) queueOrder.unshift(abs); else queueOrder.push(abs);
+    pumpQueue();
+  }
+  function pumpQueue() {
+    if (queueBusy || fullPaused) return;
+    const abs = queueOrder.shift();
+    if (!abs) return;
+    queueBusy = true; queueLoader = new Image();
+    queueLoader.onload = queueLoader.onerror = () => { queueBusy = false; queueLoader = null; setTimeout(pumpQueue, 250); };
+    queueLoader.src = abs;
+  }
+  function stopQueue() {
+    // Прерывает текущую фоновую загрузку: канал нужен кадру на экране.
+    if (!queueBusy || !queueLoader) return;
+    const back = queueLoader.src;
+    queueLoader.onload = queueLoader.onerror = null;
+    queueLoader.src = 'about:blank';
+    queueBusy = false; queueLoader = null;
+    queued.delete(back); queueOrder.push(back);
+  }
+  // —— Прогрев сайта в фоне: пока вы на сайте, копии кадров всех проектов
+  // догружаются по одной — любая страница и полный экран открываются мгновенно.
+  // Порядок: полные версии текущего проекта, затем галереи остальных проектов,
+  // затем их полные версии. На сенсорных экранах, при экономии трафика и на
+  // медленных мобильных сетях прогрев отключён. ——
+  let warmStarted = false;
+  function warmAllProjects(currentId) {
+    if (warmStarted) return; warmStarted = true;
+    if (matchMedia('(pointer: coarse)').matches) return;
+    const connection = navigator.connection;
+    if (connection && (connection.saveData || /2g/i.test(connection.effectiveType || ''))) return;
+    const current = SITE.projects.find(p => p.id === currentId);
+    if (current) current.frames.forEach(f => enqueueOriginal(originalSrc(f)));
+    const others = SITE.projects.filter(p => p.id !== currentId);
+    others.forEach(p => {
+      p.frames.forEach(f => {
+        const thumb = frameThumb(f);
+        if (thumb) enqueueOriginal(thumb);
+        enqueueOriginal(frameSrc(f));
+      });
+      (p.comparison?.frames || []).forEach(step => { if (step && step.src) enqueueOriginal(step.src); });
+    });
+    others.forEach(p => p.frames.forEach(f => enqueueOriginal(originalSrc(f))));
+    pumpQueue();
+  }
+  function scheduleWarm(currentId) {
+    // Прогрев стартует через 2,5 секунды после загрузки страницы: сначала
+    // показывается сама страница, и только потом фоновые загрузки.
+    const start = () => setTimeout(() => warmAllProjects(currentId), 2500);
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
+  }
   function initLightbox(frames, projectTitle) {
     const viewer = document.createElement('dialog');
     viewer.className = 'lightbox';
@@ -220,54 +286,9 @@
     }
     watchPixelRatio();
     paintZoom();
-    const originalSrc = f => safeUrl(typeof f === 'object' ? (f.full || f.original || f.src) : f);
     // Лёгкая версия для мгновенного показа: только когда у кадра есть более тяжёлый оригинал.
     const quickSrc = f => typeof f === 'object' && (f.full || f.original) ? safeUrl(f.src) : null;
 
-    // —— Очередь фоновых загрузок оригиналов: по одному файлу за раз, чтобы не
-    // делить канал между десятками запросов. Срочные файлы ставятся в начало,
-    // а идущая фоновая загрузка прерывается, как только нужен кадр на экране. ——
-    const queued = new Set(), queueOrder = [];
-    let queueBusy = false, queueLoader = null, fullPaused = false;
-    const absoluteUrl = u => { try { return new URL(u, location.href).href; } catch (_) { return u; } };
-    function enqueueOriginal(url, high = false) {
-      if (!url || url === '#') return;
-      const abs = absoluteUrl(url);
-      if (queued.has(abs)) return;
-      queued.add(abs);
-      if (high) queueOrder.unshift(abs); else queueOrder.push(abs);
-      pumpQueue();
-    }
-    function pumpQueue() {
-      if (queueBusy || fullPaused) return;
-      const abs = queueOrder.shift();
-      if (!abs) return;
-      queueBusy = true; queueLoader = new Image();
-      queueLoader.onload = queueLoader.onerror = () => { queueBusy = false; queueLoader = null; setTimeout(pumpQueue, 250); };
-      queueLoader.src = abs;
-    }
-    function stopQueue() {
-      // Прерывает текущую фоновую загрузку: канал нужен кадру на экране.
-      if (!queueBusy || !queueLoader) return;
-      const back = queueLoader.src;
-      queueLoader.onload = queueLoader.onerror = null;
-      queueLoader.src = 'about:blank';
-      queueBusy = false; queueLoader = null;
-      queued.delete(back); queueOrder.push(back);
-    }
-    // После открытия полного экрана остальные оригиналы проекта догружаются
-    // в фоне по одному, начиная с соседних кадров. На сенсорных экранах и при
-    // включённой экономии трафика фоновая загрузка не выполняется.
-    let originalsQueued = false;
-    function prefetchAllOriginals(startIndex) {
-      if (originalsQueued) return; originalsQueued = true;
-      if (matchMedia('(pointer: coarse)').matches) return;
-      if (navigator.connection && navigator.connection.saveData) return;
-      for (let off = 1; off <= frames.length; off++) {
-        enqueueOriginal(originalSrc(frames[(startIndex + off) % frames.length]));
-      }
-      pumpQueue();
-    }
     async function showFrame(index, direction = 0, firstOpen = false) {
       hideHint(firstOpen); hintAllowed = firstOpen;
       loadingFrame = true; resetZoom();
@@ -343,7 +364,6 @@
       viewer.querySelector('.lightbox-prev').hidden = frames.length < 2;
       viewer.querySelector('.lightbox-next').hidden = frames.length < 2;
       showFrame(index, 0, true);
-      prefetchAllOriginals(index);
       // Настоящий полноэкранный режим, если браузер разрешает. Иначе — на всё окно.
       if (viewer.requestFullscreen && document.fullscreenEnabled) {
         viewer.requestFullscreen().then(()=>{
@@ -502,6 +522,7 @@
     // qs('#demoNote').textContent = SITE.projects.some(p=>p.demo) ? '' : '';
     // qs('#demoNote').hidden = !SITE.projects.some(p=>p.demo);
     renderGrid();
+    scheduleWarm(null);
   } else {
     const id = new URLSearchParams(location.search).get('id');
     const p = SITE.projects.find(p=>p.id===id);
@@ -528,6 +549,7 @@
     root.innerHTML = `<header class="project-header"><h1>${esc(p.title)}</h1>${p.subtitle ? '<p class="project-subtitle">'+esc(p.subtitle)+'</p>' : ''}</header><section class="project-description" aria-label="Описание проекта"><p>${linkify(p.description)}</p></section><section class="project-section project-frames" aria-label="Галерея кадров">${renderFeature()}</section><section class="project-section" aria-labelledby="videoTitle"><div class="section-heading"><h2 id="videoTitle">Видео проекта</h2>${p.video ? '<span>Фрагмент</span>' : ''}</div><div id="videoContent"></div></section>`;
     initLightbox(frames, p.title);
     initComparison(p);
+    scheduleWarm(p.id);
     const v = p.video, holder = qs('#videoContent');
     if (!v) {
       holder.className='video-empty';
