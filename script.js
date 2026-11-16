@@ -55,11 +55,13 @@
   // Самая полная версия кадра: оптимизированный 4K, исходный 4K или сам файл.
   const originalSrc = f => safeUrl(typeof f === 'object' ? (f.full || f.original || f.src) : f);
 
-  // —— Очередь фоновых загрузок: по одному файлу за раз, чтобы не делить канал
-  // между десятками запросов. Срочные файлы ставятся в начало, а идущая
-  // фоновая загрузка прерывается, как только нужен кадр на экране. ——
-  const queued = new Set(), queueOrder = [];
-  let queueBusy = false, queueLoader = null, fullPaused = false;
+  // —— Очередь фоновых загрузок: два файла параллельно — прогрев идёт вдвое
+  // быстрее, но канал не замиляется десятками запросов. Срочные файлы ставятся
+  // в начало, а фоновые загрузки прерываются, как только нужен кадр на экране. ——
+  const queued = new Set(), queueOrder = [], queueLoaders = new Set();
+  let fullPaused = false;
+  // Однопиксельный GIF: подмена src на него мгновенно отменяет идущую загрузку.
+  const BLANK_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
   const absoluteUrl = u => { try { return new URL(u, location.href).href; } catch (_) { return u; } };
   function enqueueOriginal(url, high = false) {
     if (!url || url === '#') return;
@@ -70,51 +72,59 @@
     pumpQueue();
   }
   function pumpQueue() {
-    if (queueBusy || fullPaused) return;
-    const abs = queueOrder.shift();
-    if (!abs) return;
-    queueBusy = true; queueLoader = new Image();
-    queueLoader.onload = queueLoader.onerror = () => { queueBusy = false; queueLoader = null; setTimeout(pumpQueue, 250); };
-    queueLoader.src = abs;
+    if (fullPaused) return;
+    while (queueLoaders.size < 2 && queueOrder.length) {
+      const abs = queueOrder.shift(), im = new Image();
+      queueLoaders.add(im);
+      im.onload = im.onerror = () => { queueLoaders.delete(im); setTimeout(pumpQueue, 120); };
+      im.src = abs;
+    }
   }
   function stopQueue() {
-    // Прерывает текущую фоновую загрузку: канал нужен кадру на экране.
-    if (!queueBusy || !queueLoader) return;
-    const back = queueLoader.src;
-    queueLoader.onload = queueLoader.onerror = null;
-    queueLoader.src = 'about:blank';
-    queueBusy = false; queueLoader = null;
-    queued.delete(back); queueOrder.push(back);
+    // Прерывает фоновые загрузки: весь канал нужен кадру на экране.
+    // src подменяется на крошечный data-URI — смена адреса отменяет запрос,
+    // а сама подмена ошибок в консоли не создаёт.
+    if (!queueLoaders.size) return;
+    const back = [];
+    queueLoaders.forEach(im => { back.push(im.src); im.onload = im.onerror = null; im.src = BLANK_IMAGE; });
+    queueLoaders.clear();
+    queueOrder.unshift(...back);
   }
-  // —— Прогрев сайта в фоне: пока вы на сайте, копии кадров всех проектов
-  // догружаются по одной — любая страница и полный экран открываются мгновенно.
-  // Порядок: полные версии текущего проекта, затем галереи остальных проектов,
-  // затем их полные версии. На сенсорных экранах, при экономии трафика и на
-  // медленных мобильных сетях прогрев отключён. ——
+  // —— Прогрев сайта в фоне: пока вы на сайте, копии кадров догружаются —
+  // любая страница и полный экран открываются мгновенно. Проекты обрабатываются
+  // по очереди, кадр за кадром: сначала лёгкие копии галереи, затем полная 4K.
+  // Текущий проект прогревается первым (сразу полные версии). На сенсорных
+  // экранах прогрев ограничен текущим проектом, чтобы не съедать мобильный
+  // трафик; при экономии трафика и на медленных сетях (2G) отключён. ——
   let warmStarted = false;
   function warmAllProjects(currentId) {
     if (warmStarted) return; warmStarted = true;
-    if (matchMedia('(pointer: coarse)').matches) return;
+    const touch = matchMedia('(pointer: coarse)').matches;
     const connection = navigator.connection;
     if (connection && (connection.saveData || /2g/i.test(connection.effectiveType || ''))) return;
-    const current = SITE.projects.find(p => p.id === currentId);
-    if (current) current.frames.forEach(f => enqueueOriginal(originalSrc(f)));
-    const others = SITE.projects.filter(p => p.id !== currentId);
-    others.forEach(p => {
-      p.frames.forEach(f => {
-        const thumb = frameThumb(f);
-        if (thumb) enqueueOriginal(thumb);
-        enqueueOriginal(frameSrc(f));
+    SITE.projects
+      .filter(p => !touch || p.id === currentId)
+      .forEach(p => {
+        const isCurrent = p.id === currentId;
+        p.frames.forEach(f => {
+          if (isCurrent) {
+            // Кадры текущего проекта уже на экране: догружаем только полные 4K.
+            enqueueOriginal(originalSrc(f));
+          } else {
+            const thumb = frameThumb(f);
+            if (thumb) enqueueOriginal(thumb);
+            enqueueOriginal(frameSrc(f));
+            enqueueOriginal(originalSrc(f));
+          }
+        });
+        if (!isCurrent) (p.comparison?.frames || []).forEach(step => { if (step && step.src) enqueueOriginal(step.src); });
       });
-      (p.comparison?.frames || []).forEach(step => { if (step && step.src) enqueueOriginal(step.src); });
-    });
-    others.forEach(p => p.frames.forEach(f => enqueueOriginal(originalSrc(f))));
     pumpQueue();
   }
   function scheduleWarm(currentId) {
-    // Прогрев стартует через 2,5 секунды после загрузки страницы: сначала
+    // Прогрев стартует через 1,2 секунды после загрузки страницы: сначала
     // показывается сама страница, и только потом фоновые загрузки.
-    const start = () => setTimeout(() => warmAllProjects(currentId), 2500);
+    const start = () => setTimeout(() => warmAllProjects(currentId), 1200);
     if (document.readyState === 'complete') start();
     else window.addEventListener('load', start, { once: true });
   }
@@ -387,7 +397,7 @@
         if (!f) return;
         hoverCandidate = originalSrc(f);
         clearTimeout(hoverTimer);
-        hoverTimer = setTimeout(()=>enqueueOriginal(hoverCandidate, true), 250);
+        hoverTimer = setTimeout(()=>enqueueOriginal(hoverCandidate, true), 150);
       });
       button.addEventListener('pointerleave',()=>clearTimeout(hoverTimer));
     });
@@ -516,7 +526,9 @@
     });
     function renderGrid() {
       const projects = SITE.projects;
-      qs('#grid').innerHTML = projects.map((p,i) => `<a class="frame-link" href="${link(p)}" aria-label="${esc(p.title + (p.subtitle ? ' — ' + p.subtitle : ''))}"><img src="${esc(safeUrl(p.preview))}" alt="${esc(p.title)}: превью" ${i===0 ? 'fetchpriority="high" ' : ''}${i>4 ? 'loading="lazy"' : ''}><span class="scrim" aria-hidden="true"></span><span class="frame-copy"><strong>${esc(p.title)}</strong>${p.subtitle ? '<small>'+esc(p.subtitle)+'</small>' : ''}</span></a>`).join('');
+      // На телефоне плитка в одну колонку: без загрузки хватает первых двух.
+      const eagerLimit = matchMedia('(max-width:700px)').matches ? 2 : 5;
+      qs('#grid').innerHTML = projects.map((p,i) => `<a class="frame-link" href="${link(p)}" aria-label="${esc(p.title + (p.subtitle ? ' — ' + p.subtitle : ''))}"><img src="${esc(safeUrl(p.preview))}" alt="${esc(p.title)}: превью" ${i===0 ? 'fetchpriority="high" ' : ''}${i >= eagerLimit ? 'loading="lazy"' : ''}><span class="scrim" aria-hidden="true"></span><span class="frame-copy"><strong>${esc(p.title)}</strong>${p.subtitle ? '<small>'+esc(p.subtitle)+'</small>' : ''}</span></a>`).join('');
       qs('#emptyState').hidden = projects.length !== 0;
     }
     // qs('#demoNote').textContent = SITE.projects.some(p=>p.demo) ? '' : '';
@@ -535,6 +547,14 @@
     document.title = p.title + ' — ' + SITE.name;
     qs('meta[name="description"]').content = p.description;
     const frames = p.frames?.length ? p.frames : [p.preview];
+    // 4K первого кадра начинает грузиться сразу, ещё до клика: полный экран
+    // открывается с полным разрешением почти мгновенно.
+    const firstFull = frames[0] && typeof frames[0] === 'object' ? originalSrc(frames[0]) : null;
+    if (firstFull) {
+      const pre = document.createElement('link');
+      pre.rel = 'preload'; pre.as = 'image'; pre.href = firstFull;
+      document.head.appendChild(pre);
+    }
     function renderStill(f, i, extraClass = '') {
       const src = safeUrl(frameSrc(f)), thumb = frameThumb(f);
       const alt = esc(typeof f === 'object' && f.alt ? f.alt : p.title + ' — кадр ' + (i+1));
